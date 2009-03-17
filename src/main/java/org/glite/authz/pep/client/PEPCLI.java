@@ -19,9 +19,9 @@ package org.glite.authz.pep.client;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
 
 import org.glite.authz.common.config.ConfigurationException;
+import org.glite.authz.common.logging.LoggingReloadTask;
 import org.glite.authz.common.model.Request;
 import org.glite.authz.common.model.Response;
 import org.glite.authz.common.util.Files;
@@ -32,6 +32,9 @@ import org.slf4j.LoggerFactory;
 
 /**  */
 public final class PEPCLI {
+    
+    /** System property name PDP_HOME path is bound to. */
+    public static final String PEP_HOME_PROP = "org.glite.authz.pep.home";
 
     /** Class logger. */
     private static final Logger LOG = LoggerFactory.getLogger(PEPCLI.class);
@@ -49,14 +52,21 @@ public final class PEPCLI {
      */
     public static void main(String[] args) throws Exception {
         if (args.length < 1 || args.length > 1) {
-            printHelp(System.out);
+            errorAndExit("invalid configuration file", null);
         }
+        
+        initializeLogging(System.getProperty(PEP_HOME_PROP) + "/conf/logging.xml");
 
         PEPClientConfiguration clientConfing = parseConfiguration(args[0]);
         BlockingPolicyEnforcementPoint pepClient = new BlockingPolicyEnforcementPoint(clientConfing);
 
         Request request = new Request();
-        Response response = pepClient.authorize(request);
+        Response response = null;
+        try{
+        response = pepClient.authorize(request);
+        }catch(Exception e){
+            LOG.error("Error sending request to PEP daemon", e);
+        }
 
         System.out.println("Made Request:\n" + request);
         System.out.println("Recieved Response:\n" + response);
@@ -90,7 +100,7 @@ public final class PEPCLI {
     }
 
     /**
-     * Logs, as an error, the error message and exits the program.
+     *Outputs the error message and exits the program.
      * 
      * @param errorMessage error message
      * @param e exception that caused it
@@ -105,18 +115,15 @@ public final class PEPCLI {
         System.out.flush();
         System.exit(1);
     }
-
+    
     /**
-     * Prints a help message to the given output stream.
+     * Initializes the logging system and starts the process to watch for config file changes.
      * 
-     * @param out output to print the help message to
+     * @param loggingConfigFilePath path to the logging configuration file
      */
-    private static void printHelp(PrintStream out) {
-        out.println("Policy Enforcement Point (PEP) Client");
-        out.println();
-
-        out.println("Usage pepclient <configFile>");
-        System.out.flush();
-        System.exit(0);
+    private static void initializeLogging(String loggingConfigFilePath) {
+        // we don't actually reload the log files, but this class does the initial load too
+        LoggingReloadTask reloadTask = new LoggingReloadTask(loggingConfigFilePath);
+        reloadTask.run();
     }
 }

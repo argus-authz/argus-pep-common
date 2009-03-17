@@ -28,12 +28,12 @@ import org.glite.authz.common.config.AbstractConfigurationBuilder;
 public class PEPClientConfigurationBuilder extends AbstractConfigurationBuilder<PEPClientConfiguration> {
 
     /** Registered PEP daemon endpoints. */
-    private List<String> pepDaemons;
+    private List<String> pepdEndpoints;
 
     /** Constructor. */
     public PEPClientConfigurationBuilder() {
         super();
-        pepDaemons = new ArrayList<String>();
+        pepdEndpoints = new ArrayList<String>();
     }
     
     /**
@@ -42,9 +42,9 @@ public class PEPClientConfigurationBuilder extends AbstractConfigurationBuilder<
      * @param prototype the prototype configuration whose values will be used to initialize this builder
      */
     public PEPClientConfigurationBuilder(PEPClientConfiguration prototype){
-        pepDaemons = prototype.getPepDaemonEndpoints();
-        if(pepDaemons == null){
-            pepDaemons = new ArrayList<String>();
+        pepdEndpoints = prototype.getPepDaemonEndpoints();
+        if(pepdEndpoints == null){
+            pepdEndpoints = new ArrayList<String>();
         }
     }
 
@@ -52,7 +52,7 @@ public class PEPClientConfigurationBuilder extends AbstractConfigurationBuilder<
     public PEPClientConfiguration build() {
         PEPClientConfiguration config = new PEPClientConfiguration();
         populateConfiguration(config);
-        config.getPepDaemonEndpoints().addAll(pepDaemons);
+        config.setPepDaemonEndpoints(pepdEndpoints);
         return config;
     }
 
@@ -62,6 +62,6 @@ public class PEPClientConfigurationBuilder extends AbstractConfigurationBuilder<
      * @return registered PEP daemon endpoint URLs
      */
     public List<String> getPepDaemonEndpoints() {
-        return pepDaemons;
+        return pepdEndpoints;
     }
 }
