@@ -93,23 +93,23 @@ public class PEPClientIniConfigurationParser extends AbstractIniConfigurationPar
         Section configSection = iniFile.get(CLIENT_SECTION_HEADER);
 
         int maxConnections = getMaximumRequests(configSection);
-        log.debug("max requests: {}", maxConnections);
+        log.info("max requests: {}", maxConnections);
         configBuilder.setMaxConnections(maxConnections);
 
         int connTimeout = getConnectionTimeout(configSection);
-        log.debug("connection timeout: {}", connTimeout);
+        log.info("connection timeout: {}", connTimeout);
         configBuilder.setConnectionTimeout(connTimeout);
 
         int recBufferSize = getReceiveBufferSize(configSection);
-        log.debug("receive buffer size: {}", recBufferSize);
+        log.info("receive buffer size: {}", recBufferSize);
         configBuilder.setReceiveBufferSize(recBufferSize);
 
         int sendBufferSize = getSendBufferSize(configSection);
-        log.debug("send buffer size: {}", sendBufferSize);
+        log.info("send buffer size: {}", sendBufferSize);
         configBuilder.setSendBufferSize(sendBufferSize);
 
         String pepdStr = IniConfigUtil.getString(configSection, PEPD_PROP);
-        log.debug("policy enforcement point endpoints: {}", pepdStr);
+        log.info("policy enforcement point endpoints: {}", pepdStr);
         StringTokenizer pepds = new StringTokenizer(pepdStr, " ");
         while (pepds.hasMoreTokens()) {
             configBuilder.getPepDaemonEndpoints().add(pepds.nextToken());
