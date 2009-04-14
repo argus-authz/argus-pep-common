@@ -91,6 +91,12 @@ public class PEPClientIniConfigurationParser extends AbstractIniConfigurationPar
     private void processClientConfiguration(Ini iniFile, PEPClientConfigurationBuilder configBuilder)
             throws ConfigurationException {
         Section configSection = iniFile.get(CLIENT_SECTION_HEADER);
+        if (configSection == null) {
+            String errorMsg = "INI configuration does not contain the required '" + CLIENT_SECTION_HEADER
+                    + "' INI section";
+            log.error(errorMsg);
+            throw new ConfigurationException(errorMsg);
+        }
 
         int maxConnections = getMaximumRequests(configSection);
         log.info("max requests: {}", maxConnections);
