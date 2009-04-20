@@ -12,6 +12,7 @@
             <excludes>
                 <exclude>org.apache.xerces:*</exclude>
                 <exclude>org.apache.xalan:*</exclude>
+                <exclude>org.slf4j:*</exclude>
             </excludes>
             <includes>
                 <include>*:jar:*</include>
@@ -22,6 +23,12 @@
             <includes>
                 <include>org.apache.xerces:*</include>
                 <include>org.apache.xalan:*</include>
+            </includes>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory>/lib/logging</outputDirectory>
+            <includes>
+                <include>org.slf4j:*</include>
             </includes>
         </dependencySet>
     </dependencySets>
@@ -43,6 +50,8 @@
             <includes>
                 <include>*.sh</include>
             </includes>
+            <fileMode>0755</fileMode>
+            <directoryMode>0755</directoryMode>
         </fileSet>
         <fileSet>
             <directory>src/script/bat</directory>
