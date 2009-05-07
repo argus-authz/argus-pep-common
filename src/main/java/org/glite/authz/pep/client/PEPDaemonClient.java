@@ -28,12 +28,14 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.glite.authz.common.AuthorizationServiceException;
+import org.glite.authz.common.model.Request;
+import org.glite.authz.common.model.Response;
 import org.glite.authz.common.pip.PolicyInformationPoint;
 import org.glite.authz.common.util.Base64;
 import org.glite.authz.pep.client.config.PEPClientConfiguration;
-import org.glite.authz.common.model.Request;
-import org.glite.authz.common.model.Response;
+import org.glite.voms.VOMSTrustManager;
 import org.opensaml.ws.soap.client.http.HttpClientBuilder;
+import org.opensaml.ws.soap.client.http.TLSProtocolSocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,6 +63,15 @@ public class PEPDaemonClient {
         httpClientBuilder.setMaxTotalConnections(config.getMaxRequests());
         httpClientBuilder.setReceiveBufferSize(config.getReceiveBufferSize());
         httpClientBuilder.setSendBufferSize(config.getSendBufferSize());
+
+        if (config.getTrustMaterialStore() != null) {
+            try {
+                VOMSTrustManager trustManager = new VOMSTrustManager(config.getTrustMaterialStore());
+                httpClientBuilder.setHttpsProtocolSocketFactory(new TLSProtocolSocketFactory(null, trustManager));
+            } catch (Exception e) {
+                log.error("Unable to create trust manager, SSL/TLS connections to PEP will not be supported");
+            }
+        }
         httpClient = httpClientBuilder.buildClient();
     }
 

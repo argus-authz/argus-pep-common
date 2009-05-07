@@ -120,6 +120,8 @@ public class PEPClientIniConfigurationParser extends AbstractIniConfigurationPar
         while (pepds.hasMoreTokens()) {
             configBuilder.getPepDaemonEndpoints().add(pepds.nextToken());
         }
+        
+        configBuilder.setX509TrustMaterial(getX509TrustMaterialStore(iniFile.get(SECURITY_SECTION_HEADER)));
 
         processPolicyInformationPoints(iniFile, configSection, configBuilder);
 
