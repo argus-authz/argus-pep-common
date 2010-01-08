@@ -1,5 +1,6 @@
 /*
- * Copyright 2009 EGEE Collaboration
+ * Copyright 2009 Members of the EGEE Collaboration.
+ * See http://www.eu-egee.org/partners for details on the copyright holders. 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +16,11 @@
  */
 
 /** 
- * Classes used to create and hold a PEP client configuration. 
+ * An obligation handler that maps a subject to a POSIX account.
  * 
- * @see <a href="https://twiki.cern.ch/twiki/bin/view/EGEE/AuthZPEP#Policy_Enforcement_Point_Client">PEP configuration and usage documentation</a>
+ * Currently this package supports the mapping of a subject to an account based on an X.509 subject ID, a primary FQAN,
+ * and a set of secondary FQANs.
+ * 
+ * DFPM stands for DN/FQAN to POSIX Mapping.
  */
-package org.glite.authz.pep.client.config;
+package org.glite.authz.pep.obligation.dfpmap;

@@ -1,5 +1,6 @@
 /*
- * Copyright 2009 EGEE Collaboration
+ * Copyright 2009 Members of the EGEE Collaboration.
+ * See http://www.eu-egee.org/partners for details on the copyright holders. 
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +15,7 @@
  * limitations under the License.
  */
 
-/** 
- * A policy enforcement point client.  This client uses the Hessian 1 authorization request protocol supported 
- * by the policy enforcement point daemon.  See the package {@code org.glite.authz.common.model} package for the
- * data model used by this request.
- * 
- * @see <a href="http://hessian.caucho.com/doc/hessian-1.0-spec.xtp">Hessian 1 specification</a>
+/**
+ * Policy information point implementations.
  */
-package org.glite.authz.pep.client;
+package org.glite.authz.pep.pip.provider;

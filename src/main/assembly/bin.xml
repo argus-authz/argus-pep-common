@@ -13,9 +13,6 @@
             <includes>
                 <include>*:jar</include>
             </includes>
-            <excludes>
-                <exclude>ch.qos.logback:*</exclude>
-            </excludes>
         </dependencySet>
         
         <dependencySet>
