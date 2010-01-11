@@ -27,6 +27,8 @@ import org.glite.authz.pep.pip.IniPIPConfigurationParser;
 import org.glite.authz.pep.pip.PolicyInformationPoint;
 import org.glite.authz.common.util.Strings;
 import org.ini4j.Ini.Section;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Configuration parser for {@link AttributeWhitelistPIP}. */
 @ThreadSafe
@@ -52,14 +54,40 @@ public class AttributeWhitelistPIPIniConfigurationParser implements IniPIPConfig
      */
     public static final String SUB_ATTRIBS_PROP = "acceptedSubjectAttributes";
 
+    /** Class logger. */
+    private final Logger log = LoggerFactory.getLogger(AttributeWhitelistPIPIniConfigurationParser.class);
+
     /** {@inheritDoc} */
     public PolicyInformationPoint parse(Section iniConfig, AbstractConfigurationBuilder<?> configBuilder)
             throws ConfigurationException {
 
         String[] actionAttributeIds = parseAcceptedAttributeIds(iniConfig.get(ACT_ATTRIBS_PROP));
+        if (actionAttributeIds != null && actionAttributeIds.length > 0) {
+            log.info("white listed action attributes: " + actionAttributeIds.toString());
+        } else {
+            log.info("white listed action attributes: all");
+        }
+
         String[] environmentAttributeIds = parseAcceptedAttributeIds(iniConfig.get(ENV_ATTRIBS_PROP));
+        if (environmentAttributeIds != null && environmentAttributeIds.length > 0) {
+            log.info("white listed environment attributes: " + environmentAttributeIds.toString());
+        } else {
+            log.info("white listed environment attributes: all");
+        }
+
         String[] resourceAttributeIds = parseAcceptedAttributeIds(iniConfig.get(RES_ATTRIBS_PROP));
+        if (resourceAttributeIds != null && resourceAttributeIds.length > 0) {
+            log.info("white listed resource attributes: " + resourceAttributeIds.toString());
+        } else {
+            log.info("white listed resource attributes: all");
+        }
+
         String[] subjectAttributeIds = parseAcceptedAttributeIds(iniConfig.get(SUB_ATTRIBS_PROP));
+        if (subjectAttributeIds != null && subjectAttributeIds.length > 0) {
+            log.info("white listed subject attributes: " + subjectAttributeIds.toString());
+        } else {
+            log.info("white listed subject attributes: all");
+        }
 
         return new AttributeWhitelistPIP(iniConfig.getName(), actionAttributeIds, environmentAttributeIds,
                 resourceAttributeIds, subjectAttributeIds);
