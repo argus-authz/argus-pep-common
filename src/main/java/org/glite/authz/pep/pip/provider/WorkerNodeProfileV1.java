@@ -82,7 +82,7 @@ public class WorkerNodeProfileV1 extends AbstractX509PIP {
         Environment env = request.getEnvironment();
         if (env != null) {
             for (Attribute attrib : env.getAttributes()) {
-                if (ProfileConstants.OPENXACML_PROFILE_STEM.equals(attrib.getId())
+                if (WorkerNodeProfileV1Constants.ATT_PROFILE_ID.equals(attrib.getId())
                         && attrib.getValues().contains(WorkerNodeProfileV1Constants.PRO_ID)) {
                     return true;
                 }
