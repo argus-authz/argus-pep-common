@@ -235,9 +235,9 @@ public abstract class AbstractX509PIP extends AbstractPolicyInformationPoint {
         X509Certificate[] certChain = chainVector.toArray(new X509Certificate[] {});
         boolean proxyPresent = false;
         for (X509Certificate cert : certChain) {
-            if (cert.getVersion() != 3) {
-                log.warn("Subject certificate {} is not a version 3 certificate, certificate chain ignored", cert
-                        .getSubjectX500Principal().getName(X500Principal.RFC2253));
+            if (cert.getVersion() < 3) {
+                log.warn("Subject certificate {} is not a version 3, or greater, certificate, certificate chain ignored",
+                                cert.getSubjectX500Principal().getName(X500Principal.RFC2253));
                 return null;
             }
             if (requireProxyCertificate && PKIUtils.isProxy(cert)) {
@@ -284,8 +284,7 @@ public abstract class AbstractX509PIP extends AbstractPolicyInformationPoint {
      *             certificate chain
      */
     @SuppressWarnings("unchecked")
-    protected VOMSAttribute extractAttributeCertificate(X509Certificate[] certChain)
-            throws PIPProcessingException {
+    protected VOMSAttribute extractAttributeCertificate(X509Certificate[] certChain) throws PIPProcessingException {
         VOMSValidator vomsValidator = null;
         vomsValidator = new VOMSValidator(certChain, new ACValidator(getCertVerifier()));
         vomsValidator.validate();

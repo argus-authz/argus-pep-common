@@ -22,8 +22,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.security.auth.x500.X500Principal;
-
 import org.glite.authz.common.config.ConfigurationException;
 import org.glite.authz.common.model.Attribute;
 import org.glite.authz.common.model.Request;
@@ -31,6 +29,7 @@ import org.glite.authz.common.model.Subject;
 import org.glite.authz.pep.pip.PIPProcessingException;
 import org.glite.voms.FQAN;
 import org.glite.voms.PKIStore;
+import org.glite.voms.PKIUtils;
 import org.glite.voms.VOMSAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,9 +49,6 @@ import org.slf4j.LoggerFactory;
  */
 public class SCASLegacyPIP extends AbstractX509PIP {
 
-    /** The ID of the subject attribute, {@value} , containing the end-entity certificate processed by the PIP. */
-    public static final String X509_CERT_CHAIN_ID = "http://authz-interop.org/xacml/subject/cert-chain";
-
     /**
      * The ID of the subject attribute, {@value} , containing the end-entity certificate's issuer's DN in the
      * non-standard OpenSSL format.
@@ -61,9 +57,6 @@ public class SCASLegacyPIP extends AbstractX509PIP {
 
     /** The ID of the subject attribute, {@value} , containing the end-entity certificate's issuer's DN. */
     public static final String X509_DN_ISSUER = "http://authz-interop.org/xacml/subject/subject-x509-issuer";
-
-    /** The ID of the subject attribute, {@value} , containing the end-entity certificate's serial number. */
-    public static final String X509_SN = "http://authz-interop.org/xacml/subject/certificate-serial-number";
 
     /** The ID of the subject attribute, {@value} , containing the VO given in the VOMS attribute certificate. */
     public static final String VOMS_VO = "http://authz-interop.org/xacml/subject/vo";
@@ -82,6 +75,21 @@ public class SCASLegacyPIP extends AbstractX509PIP {
 
     /** The ID of the subject attribute, {@value} , containing the primary FQAN given in the VOMS attribute certificate. */
     public static final String VOMS_PRIMARY_FQAN = "http://authz-interop.org/xacml/subject/voms-primary-fqan";
+
+    /** The ID of the subject attribute, {@value} , containing the end-entity certificate's serial number. */
+    public static final String X509_SN = "http://authz-interop.org/xacml/subject/certificate-serial-number";
+
+    /** The ID of the subject attribute, {@value} , containing the end-entity certificate's serial number. */
+    public static final String X509_CA_SN = "http://authz-interop.org/xacml/subject/ca-serial-number";
+
+    /** The ID of the subject attribute, {@value} , containing the VOMS server hostname and port. */
+    public static final String VOMS_DNS_PORT = "http://authz-interop.org/xacml/subject/voms-dns-port";
+
+    /** The ID of the subject attribute, {@value} , containing the end entity certificate CA policy OID. */
+    public static final String CA_POLICY_OID = "http://authz-interop.org/xacml/subject/ca-policy-oid";
+
+    /** The ID of the subject attribute, {@value} , containing the end-entity certificate processed by the PIP. */
+    public static final String X509_CERT_CHAIN_ID = "http://authz-interop.org/xacml/subject/cert-chain";
 
     /**
      * The ID of the subject attribute, {@value} , containing the generic attributes given in the VOMS attribute
@@ -141,36 +149,48 @@ public class SCASLegacyPIP extends AbstractX509PIP {
         if (endEntityCertificate == null || certChain == null || certChain.length == 0) {
             return null;
         }
+        X509Certificate caCert = null;
+        for (X509Certificate cert : certChain) {
+            if (cert.getSubjectX500Principal().equals(endEntityCertificate.getIssuerX500Principal())) {
+                caCert = cert;
+            }
+        }
+        if (caCert == null) {
+            throw new PIPProcessingException("CA for the end entity certificate was not found in the cert chain");
+        }
 
         log.debug("Extracting end-entity certificate attributes");
         HashSet<Attribute> subjectAttributes = new HashSet<Attribute>();
-        String endEntityIssuerDn = endEntityCertificate.getIssuerX500Principal().getName(X500Principal.RFC2253);
 
-        // get and set the subject DN attribute.
-        String endEntitySubjectDN = endEntityCertificate.getSubjectX500Principal().getName(X500Principal.RFC2253);
+        // subject X509 ID
         Attribute attribute = new Attribute();
-        attribute.setId(Attribute.ID_SUB_ID);
-        attribute.setDataType(Attribute.DT_X500_NAME);
-        attribute.setIssuer(endEntityIssuerDn);
-        attribute.getValues().add(endEntitySubjectDN);
+        attribute.setId(SUBJECT_X509_ID);
+        attribute.setDataType(Attribute.DT_STRING);
+        attribute.getValues().add(PKIUtils.getOpenSSLFormatPrincipal(endEntityCertificate.getSubjectX500Principal()));
         log.debug("Extracted attribute: {}", attribute);
         subjectAttributes.add(attribute);
 
-        // set the issuer DN attribute.
+        // X509 issuer
         attribute = new Attribute();
         attribute.setId(X509_DN_ISSUER);
-        attribute.setDataType(Attribute.DT_X500_NAME);
-        attribute.setIssuer(endEntityIssuerDn);
-        attribute.getValues().add(endEntityIssuerDn);
+        attribute.setDataType(Attribute.DT_STRING);
+        attribute.getValues().add(PKIUtils.getOpenSSLFormatPrincipal(endEntityCertificate.getIssuerX500Principal()));
         log.debug("Extracted attribute: {}", attribute);
         subjectAttributes.add(attribute);
 
-        // set the cert serial number.
+        // cert serial number
         attribute = new Attribute();
         attribute.setId(X509_SN);
-        attribute.setDataType(Attribute.DT_STRING);
-        attribute.setIssuer(endEntityIssuerDn);
+        attribute.setDataType(Attribute.DT_INTEGER);
         attribute.getValues().add(endEntityCertificate.getSerialNumber().toString());
+        log.debug("Extracted attribute: {}", attribute);
+        subjectAttributes.add(attribute);
+
+        // CA cert serial number
+        attribute = new Attribute();
+        attribute.setId(X509_CA_SN);
+        attribute.setDataType(Attribute.DT_INTEGER);
+        attribute.getValues().add(caCert.getSerialNumber().toString());
         log.debug("Extracted attribute: {}", attribute);
         subjectAttributes.add(attribute);
 
@@ -207,20 +227,35 @@ public class SCASLegacyPIP extends AbstractX509PIP {
 
         HashSet<Attribute> vomsAttributes = new HashSet<Attribute>();
 
-        Attribute voAttribute = new Attribute();
-        voAttribute.setId(VOMS_VO);
-        voAttribute.setDataType(Attribute.DT_STRING);
-        voAttribute.setIssuer(attributeCertificate.getIssuer());
-        voAttribute.getValues().add(attributeCertificate.getVO());
-        log.debug("Extracted attribute: {}", voAttribute);
-        vomsAttributes.add(voAttribute);
+        // vo
+        Attribute attribute = new Attribute();
+        attribute.setId(VOMS_VO);
+        attribute.setDataType(Attribute.DT_STRING);
+        attribute.getValues().add(attributeCertificate.getVO());
+        log.debug("Extracted attribute: {}", attribute);
+        vomsAttributes.add(attribute);
 
+        // voms signing subject
+        attribute = new Attribute();
+        attribute.setId(VOMS_SIGNER);
+        attribute.setDataType(Attribute.DT_STRING);
+        attribute.getValues().add(attributeCertificate.getIssuer());
+        vomsAttributes.add(attribute);
+
+        // voms signing issuer
+        X509Certificate vomsServerIssuer = (X509Certificate)(attributeCertificate.getCertList().getCerts().get(1));
+        attribute = new Attribute();
+        attribute.setId(VOMS_SIGNER_ISSUER);
+        attribute.setDataType(Attribute.DT_STRING);
+        attribute.getValues().add(PKIUtils.getOpenSSLFormatPrincipal(vomsServerIssuer.getSubjectX500Principal()));
+        vomsAttributes.add(attribute);
+
+        // Primary and secondary FQANs
         List<FQAN> fqans = attributeCertificate.getListOfFQAN();
         if (fqans != null && !fqans.isEmpty()) {
             Attribute primaryFqanAttribute = new Attribute();
             primaryFqanAttribute.setId(VOMS_PRIMARY_FQAN);
             primaryFqanAttribute.setDataType(Attribute.DT_STRING);
-            primaryFqanAttribute.setIssuer(attributeCertificate.getIssuer());
             primaryFqanAttribute.getValues().add(fqans.get(0).getFQAN());
             log.debug("Extracted attribute: {}", primaryFqanAttribute);
             vomsAttributes.add(primaryFqanAttribute);
@@ -229,13 +264,19 @@ public class SCASLegacyPIP extends AbstractX509PIP {
             Attribute fqanAttribute = new Attribute();
             fqanAttribute.setId(VOMS_FQAN);
             fqanAttribute.setDataType(Attribute.DT_STRING);
-            fqanAttribute.setIssuer(attributeCertificate.getIssuer());
             for (FQAN fqan : fqans) {
                 fqanAttribute.getValues().add(fqan.getFQAN());
             }
             log.debug("Extracted attribute: {}", fqanAttribute);
             vomsAttributes.add(fqanAttribute);
         }
+
+        // VOMS DNS and Port
+        attribute = new Attribute();
+        attribute.setId(VOMS_DNS_PORT);
+        attribute.setDataType(Attribute.DT_STRING);
+        attribute.getValues().add(attributeCertificate.getHostPort());
+        vomsAttributes.add(attribute);
 
         return vomsAttributes;
     }
