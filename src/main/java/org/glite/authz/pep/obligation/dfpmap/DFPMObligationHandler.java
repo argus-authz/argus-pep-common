@@ -309,21 +309,27 @@ public class DFPMObligationHandler extends AbstractObligationHandler {
 
         AttributeAssignment userid = new AttributeAssignment();
         userid.setAttributeId(WorkerNodeProfileV1Constants.ATT_USER_ID);
-        userid.getValues().add(account.getLoginName());
+        userid.setDataType(Attribute.DT_STRING);
+        userid.setValue(account.getLoginName());
         posixMapping.getAttributeAssignments().add(userid);
 
         if (account.getPrimaryGroup() != null) {
             AttributeAssignment primaryGroupId = new AttributeAssignment();
             primaryGroupId.setAttributeId(WorkerNodeProfileV1Constants.ATT_PRIMARY_GROUP_ID);
-            primaryGroupId.getValues().add(account.getPrimaryGroup());
+            primaryGroupId.setDataType(Attribute.DT_STRING);
+            primaryGroupId.setValue(account.getPrimaryGroup());
             posixMapping.getAttributeAssignments().add(primaryGroupId);
         }
 
         if (account.getSecondaryGroups() != null && !account.getSecondaryGroups().isEmpty()) {
-            AttributeAssignment secondaryGroupIds = new AttributeAssignment();
-            secondaryGroupIds.setAttributeId(WorkerNodeProfileV1Constants.ATT_GROUP_ID);
-            secondaryGroupIds.getValues().addAll(account.getSecondaryGroups());
-            posixMapping.getAttributeAssignments().add(secondaryGroupIds);
+            AttributeAssignment secondaryGroupId;
+            for(String secondaryGroup : account.getSecondaryGroups()){
+                secondaryGroupId = new AttributeAssignment();
+                secondaryGroupId.setAttributeId(WorkerNodeProfileV1Constants.ATT_GROUP_ID);
+                secondaryGroupId.setDataType(Attribute.DT_STRING);
+                secondaryGroupId.setValue(secondaryGroup);
+                posixMapping.getAttributeAssignments().add(secondaryGroupId);
+            }
         }
 
         result.getObligations().add(posixMapping);

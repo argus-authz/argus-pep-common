@@ -225,14 +225,14 @@ public class XACMLConverter {
         AttributeType xacmlAttribute = attributeBuilder.buildObject();
 
         xacmlAttribute.setAttributeID(Strings.safeTrimOrNullString(attribute.getId()));
-        
+
         String datatype = Strings.safeTrimOrNullString(attribute.getDataType());
-        if(datatype != null){
+        if (datatype != null) {
             xacmlAttribute.setDataType(datatype);
-        }else{
+        } else {
             xacmlAttribute.setDataType(Attribute.DT_STRING);
         }
-        
+
         xacmlAttribute.setIssuer(Strings.safeTrimOrNullString(attribute.getIssuer()));
 
         if (attribute.getValues() != null) {
@@ -312,10 +312,8 @@ public class XACMLConverter {
                 attributeAssignment = new AttributeAssignment();
                 attributeAssignment.setAttributeId(Strings.safeTrimOrNullString(xacmlAttributeAssignment
                         .getAttributeId()));
-                if (!Strings.isEmpty(xacmlAttributeAssignment.getValue())) {
-                    attributeAssignment.getValues().add(
-                            Strings.safeTrimOrNullString(xacmlAttributeAssignment.getValue()));
-                }
+                attributeAssignment.setDataType(Strings.safeTrimOrNullString(xacmlAttributeAssignment.getDataType()));
+                attributeAssignment.setValue(Strings.safeTrimOrNullString(xacmlAttributeAssignment.getValue()));
             }
         }
 
@@ -355,9 +353,8 @@ public class XACMLConverter {
                 xacmlAttributeAssignment = attributeAssignmentBuilder.buildObject();
                 xacmlAttributeAssignment.setAttributeId(Strings.safeTrimOrNullString(attributeAssignment
                         .getAttributeId()));
-                if (attributeAssignment.getValues() != null && !attributeAssignment.getValues().isEmpty()) {
-                    xacmlAttributeAssignment.setValue(attributeAssignment.getValues().get(0));
-                }
+                xacmlAttributeAssignment.setDataType(attributeAssignment.getDataType());
+                xacmlAttributeAssignment.setValue(attributeAssignment.getValue());
             }
         }
 

@@ -18,11 +18,9 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 import net.jcip.annotations.NotThreadSafe;
 
-import org.glite.authz.common.util.LazyList;
 import org.glite.authz.common.util.Strings;
 
 /** A requirement that a particular attribute have a given set of values within the PEP. */
@@ -35,12 +33,14 @@ public final class AttributeAssignment implements Serializable {
     /** ID of the attribute. */
     private String attributeId;
 
+    /** Data type of the attribute. */
+    private String dataType;
+
     /** Values of the attribute. */
-    private LazyList<String> values;
+    private String value;
 
     /** Constructor. */
     public AttributeAssignment() {
-        values = new LazyList<String>();
     }
 
     /**
@@ -62,12 +62,39 @@ public final class AttributeAssignment implements Serializable {
     }
 
     /**
-     * Gets the values the identified attribute must be assigned.
+     * Gets the data type of the attribute.
      * 
-     * @return values the identified attribute must be assigned
+     * @return data type of the attribute
      */
-    public List<String> getValues() {
-        return values;
+    public String getDataType() {
+        return dataType;
+    }
+
+    /**
+     * Sets the data type of the attribute.
+     * 
+     * @param type data type of the attribute
+     */
+    public void setDataType(String type) {
+        dataType = Strings.safeTrimOrNullString(type);
+    }
+
+    /**
+     * Gets the value the identified attribute must be assigned.
+     * 
+     * @return value the identified attribute must be assigned
+     */
+    public String getValue() {
+        return value;
+    }
+
+    /**
+     * Sets the value the identified attribute must be assigned.
+     * 
+     * @param newValue value the identified attribute must be assigned
+     */
+    public void setValue(String newValue) {
+        value = Strings.safeTrimOrNullString(newValue);
     }
 
     /** {@inheritDoc} */
@@ -76,13 +103,8 @@ public final class AttributeAssignment implements Serializable {
 
         stringBuilder.append("AttributeAssignment {");
         stringBuilder.append("attributeId: ").append(attributeId).append(", ");
-
-        stringBuilder.append("values: [");
-        for (String value : values) {
-            stringBuilder.append(value).append(", ");
-        }
-        stringBuilder.append("]");
-
+        stringBuilder.append("dataType: ").append(dataType).append(", ");
+        stringBuilder.append("value: ").append(value).append(", ");
         stringBuilder.append("}");
 
         return stringBuilder.toString();
@@ -93,7 +115,8 @@ public final class AttributeAssignment implements Serializable {
         int hash = 13;
 
         hash = 31 * hash + (null == attributeId ? 0 : attributeId.hashCode());
-        hash = 31 * hash + values.hashCode();
+        hash = 31 * hash + (null == dataType ? 0 : dataType.hashCode());
+        hash = 31 * hash + (null == value ? 0 : value.hashCode());
 
         return hash;
     }
@@ -109,6 +132,8 @@ public final class AttributeAssignment implements Serializable {
         }
 
         AttributeAssignment otherAssignment = (AttributeAssignment) obj;
-        return Strings.safeEquals(attributeId, otherAssignment) && values.equals(otherAssignment.getValues());
+        return Strings.safeEquals(attributeId, otherAssignment)
+                && Strings.safeEquals(dataType, otherAssignment.getDataType())
+                && Strings.safeEquals(value, otherAssignment.getValue());
     }
 }

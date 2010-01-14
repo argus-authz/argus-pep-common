@@ -28,7 +28,6 @@ import org.glite.authz.common.config.ConfigurationException;
 import org.glite.authz.common.model.Attribute;
 import org.glite.authz.common.model.Environment;
 import org.glite.authz.common.model.Request;
-import org.glite.authz.common.profile.ProfileConstants;
 import org.glite.authz.common.profile.WorkerNodeProfileV1Constants;
 import org.glite.authz.pep.pip.PIPProcessingException;
 import org.glite.voms.FQAN;
@@ -53,7 +52,7 @@ import org.slf4j.LoggerFactory;
 public class WorkerNodeProfileV1 extends AbstractX509PIP {
 
     /** Class logger. */
-    private Logger log = LoggerFactory.getLogger(SCASLegacyPIP.class);
+    private Logger log = LoggerFactory.getLogger(WorkerNodeProfileV1.class);
 
     /**
      * The constructor for this PIP. This constructor enables support for the VOMS attribute certificates.
