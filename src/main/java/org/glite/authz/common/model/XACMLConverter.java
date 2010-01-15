@@ -540,6 +540,8 @@ public class XACMLConverter {
         }
 
         Result result = new Result();
+        
+        result.setResourceId(xacmlResult.getResourceId());
 
         switch (xacmlResult.getDecision().getDecision()) {
             case Deny:
