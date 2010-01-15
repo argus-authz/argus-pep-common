@@ -58,7 +58,7 @@ public class DFPMObligationHandler extends AbstractObligationHandler {
      * @param mapper mapper used to map a subject to a POSIX account
      */
     public DFPMObligationHandler(AccountMapper mapper) {
-        super(WorkerNodeProfileV1Constants.OBL_POSIX_ENV_MAP);
+        super(WorkerNodeProfileV1Constants.OBL_LOCAL_ENV_MAP);
 
         if (mapper == null) {
             throw new IllegalArgumentException("Account mapper may not be null");
@@ -73,7 +73,7 @@ public class DFPMObligationHandler extends AbstractObligationHandler {
      * @param mapper mapper used to map a subject to a POSIX account
      */
     public DFPMObligationHandler(int precedence, AccountMapper mapper) {
-        super(WorkerNodeProfileV1Constants.OBL_POSIX_ENV_MAP, precedence);
+        super(WorkerNodeProfileV1Constants.OBL_LOCAL_ENV_MAP, precedence);
 
         if (mapper == null) {
             throw new IllegalArgumentException("Account mapper may not be null");
@@ -107,8 +107,7 @@ public class DFPMObligationHandler extends AbstractObligationHandler {
             }
             result.getObligations().removeAll(removedObligations);
         }
-        log
-                .debug("Finished processing DN/FQAN to POSIX account mapping obligation for subject {}", subjectDN
+        log.debug("Finished processing DN/FQAN to POSIX account mapping obligation for subject {}", subjectDN
                         .getName());
     }
 

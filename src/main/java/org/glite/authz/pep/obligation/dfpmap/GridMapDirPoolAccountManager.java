@@ -126,21 +126,29 @@ public class GridMapDirPoolAccountManager implements PoolAccountManager {
             List<String> secondaryGroups) throws ObligationProcessingException {
         String subjectIdentifier = buildSubjectIdentifier(subjectDN, primaryGroup, secondaryGroups);
 
-        log.debug("Checking if there is an existing account mapping for subject {} with primary group {} and secondary groups {}",
+        log
+                .debug(
+                        "Checking if there is an existing account mapping for subject {} with primary group {} and secondary groups {}",
                         new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups });
         String accountName = getAccountNameByKey(accountNamePrefix, subjectIdentifier);
         if (accountName != null) {
-            log.debug("An existing account mapping has mapped subject {} with primary group {} and secondary groups {} to pool account {}",
+            log
+                    .debug(
+                            "An existing account mapping has mapped subject {} with primary group {} and secondary groups {} to pool account {}",
                             new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups, accountName });
             return accountName;
         }
 
         accountName = createMapping(accountNamePrefix, subjectIdentifier);
         if (accountName != null) {
-            log.debug("A new account mapping has mapped subject {} with primary group {} and secondary groups {} to pool account {}",
+            log
+                    .debug(
+                            "A new account mapping has mapped subject {} with primary group {} and secondary groups {} to pool account {}",
                             new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups, accountName });
         } else {
-            log.debug("No pool account was available to which subject {} with primary group {} and secondary groups {} could be mapped",
+            log
+                    .debug(
+                            "No pool account was available to which subject {} with primary group {} and secondary groups {} could be mapped",
                             new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups });
         }
         return accountName;
@@ -197,6 +205,8 @@ public class GridMapDirPoolAccountManager implements PoolAccountManager {
     public String createMapping(String accountNamePrefix, String subjectIdentifier) {
         FileStat accountFileStat;
         for (File accountFile : getAccountFiles(accountNamePrefix)) {
+            log.debug("Checking if grid map account {} may be linked to subject identifier {}", accountFile.getName(),
+                    subjectIdentifier);
             String subjectIdentifierFilePath = buildSubjectIdentifierFilePath(subjectIdentifier);
             accountFileStat = PosixUtil.getFileStat(accountFile.getAbsolutePath());
             if (accountFileStat.nlink() == 1) {
@@ -209,6 +219,7 @@ public class GridMapDirPoolAccountManager implements PoolAccountManager {
                 }
                 new File(subjectIdentifierFilePath).delete();
             }
+            log.debug("Could not map to account {}", accountFile.getName());
         }
 
         return null;
@@ -228,7 +239,7 @@ public class GridMapDirPoolAccountManager implements PoolAccountManager {
         StringBuilder identifier = new StringBuilder();
 
         try {
-            String encodedId = URIUtil.encodeQuery(PKIUtils.getOpenSSLFormatPrincipal(subjectDN, true));
+            String encodedId = URIUtil.encodeWithinPath(PKIUtils.getOpenSSLFormatPrincipal(subjectDN, true));
             identifier.append(encodedId.toLowerCase());
         } catch (URIException e) {
             throw new RuntimeException("US-ASCII charset required to be supported by JVM but is not available");
