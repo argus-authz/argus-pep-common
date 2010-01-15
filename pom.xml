@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.glite.authz</groupId>
     <artifactId>pep-common</artifactId>
-    <name>gLite Authorization Service: PEP Java Client</name>
+    <name>gLite Authorization Service: PEP Java Common Libray</name>
     <version>1.0.0</version>
 
     <description>XACML based authorization service developed within the gLite project.
