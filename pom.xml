@@ -231,7 +231,7 @@
         <profile>
             <id>etics</id>
             <build>
-                <finalName>pepj</finalName>
+                <finalName>pep-common</finalName>
             </build>
         </profile>
     </profiles>
