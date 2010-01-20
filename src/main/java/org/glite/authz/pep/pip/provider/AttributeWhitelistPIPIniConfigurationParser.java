@@ -18,6 +18,7 @@
 package org.glite.authz.pep.pip.provider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import net.jcip.annotations.ThreadSafe;
 
@@ -63,28 +64,28 @@ public class AttributeWhitelistPIPIniConfigurationParser implements IniPIPConfig
 
         String[] actionAttributeIds = parseAcceptedAttributeIds(iniConfig.get(ACT_ATTRIBS_PROP));
         if (actionAttributeIds != null && actionAttributeIds.length > 0) {
-            log.info("white listed action attributes: " + actionAttributeIds.toString());
+            log.info("white listed action attributes: " + Arrays.toString(actionAttributeIds));
         } else {
             log.info("white listed action attributes: all");
         }
 
         String[] environmentAttributeIds = parseAcceptedAttributeIds(iniConfig.get(ENV_ATTRIBS_PROP));
         if (environmentAttributeIds != null && environmentAttributeIds.length > 0) {
-            log.info("white listed environment attributes: " + environmentAttributeIds.toString());
+            log.info("white listed environment attributes: " + Arrays.toString(environmentAttributeIds));
         } else {
             log.info("white listed environment attributes: all");
         }
 
         String[] resourceAttributeIds = parseAcceptedAttributeIds(iniConfig.get(RES_ATTRIBS_PROP));
         if (resourceAttributeIds != null && resourceAttributeIds.length > 0) {
-            log.info("white listed resource attributes: " + resourceAttributeIds.toString());
+            log.info("white listed resource attributes: " + Arrays.toString(resourceAttributeIds));
         } else {
             log.info("white listed resource attributes: all");
         }
 
         String[] subjectAttributeIds = parseAcceptedAttributeIds(iniConfig.get(SUB_ATTRIBS_PROP));
         if (subjectAttributeIds != null && subjectAttributeIds.length > 0) {
-            log.info("white listed subject attributes: " + subjectAttributeIds.toString());
+            log.info("white listed subject attributes: " + Arrays.toString(subjectAttributeIds));
         } else {
             log.info("white listed subject attributes: all");
         }
