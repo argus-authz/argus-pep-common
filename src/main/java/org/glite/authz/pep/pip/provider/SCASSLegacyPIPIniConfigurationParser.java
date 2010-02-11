@@ -27,6 +27,9 @@ public class SCASSLegacyPIPIniConfigurationParser extends AbstractX509PIPIniConf
     protected AbstractX509PIP buildInformationPoint(String id, boolean requireProxy, PKIStore tustMaterial,
             PKIStore acTrustMaterial, boolean performPKIXValidation) throws ConfigurationException {
 
-        return new SCASLegacyPIP(id, requireProxy, tustMaterial, acTrustMaterial);
+        SCASLegacyPIP pip= new SCASLegacyPIP(id, requireProxy, tustMaterial, acTrustMaterial);
+        // bug fix: perform PKIX validation not passed to PIP
+        pip.performPKIXValidation(performPKIXValidation);
+        return pip;
     }
 }
