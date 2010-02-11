@@ -7,7 +7,7 @@
     <groupId>org.glite.authz</groupId>
     <artifactId>pep-common</artifactId>
     <name>gLite Authorization Service: PEP Java Common Libray</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <description>XACML based authorization service developed within the gLite project.
     </description>
@@ -256,6 +256,16 @@
             <roles>
                 <role>developer</role>
                 <role>documentation</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>vtschopp</id>
+            <name>Valery Tschopp</name>
+            <organization>SWITCH</organization>
+            <organizationUrl>http://www.switch.ch/</organizationUrl>
+            <roles>
+                <role>developer</role>
             </roles>
             <timezone>+1</timezone>
         </developer>
