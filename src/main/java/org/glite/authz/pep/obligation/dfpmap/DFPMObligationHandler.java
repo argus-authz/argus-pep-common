@@ -33,7 +33,6 @@ import org.glite.authz.common.model.Subject;
 import org.glite.authz.common.profile.WorkerNodeProfileV1Constants;
 import org.glite.authz.pep.obligation.AbstractObligationHandler;
 import org.glite.authz.pep.obligation.ObligationProcessingException;
-import org.glite.authz.pep.pip.provider.SCASLegacyPIP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
