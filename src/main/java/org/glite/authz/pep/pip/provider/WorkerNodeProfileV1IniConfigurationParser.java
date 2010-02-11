@@ -38,6 +38,10 @@ public class WorkerNodeProfileV1IniConfigurationParser extends AbstractX509PIPIn
     /** {@inheritDoc} */
     protected AbstractX509PIP buildInformationPoint(String id, boolean requireProxy, PKIStore trustMaterial,
             PKIStore acTrustMaterial, boolean performPKIXValidation) throws ConfigurationException {
-        return new WorkerNodeProfileV1(id, requireProxy, trustMaterial, acTrustMaterial);
+        AbstractX509PIP pip= new WorkerNodeProfileV1(id, requireProxy, trustMaterial, acTrustMaterial);
+        // bug fix: perform PKIX validation not passed to PIP
+        pip.performPKIXValidation(performPKIXValidation);
+        return pip;
+        
     }
 }
