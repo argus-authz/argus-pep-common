@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
@@ -41,6 +42,7 @@ import org.glite.voms.PKIVerifier;
 import org.glite.voms.VOMSAttribute;
 import org.glite.voms.VOMSValidator;
 import org.glite.voms.ac.ACValidator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,6 +63,9 @@ public abstract class AbstractX509PIP extends AbstractPolicyInformationPoint {
 
     /** Whether VOMS AC support is currently enabled. */
     private boolean vomsSupportEnabled;
+
+    /** PKIStore containing trust material used to validate the subject's end entity certificate */
+    private PKIStore eeTrustMaterial;
 
     /** Verifier used to validate an X.509 certificate chain which may, or may not, include AC certs. */
     private PKIVerifier certVerifier;
@@ -94,6 +99,7 @@ public abstract class AbstractX509PIP extends AbstractPolicyInformationPoint {
 
         try {
             certReader = new FileCertReader();
+            this.eeTrustMaterial = eeTrustMaterial;
             certVerifier = new PKIVerifier(acTrustMaterial, eeTrustMaterial);
         } catch (Exception e) {
             throw new ConfigurationException("Unable to create X509 trust manager: " + e.getMessage());
@@ -149,6 +155,14 @@ public abstract class AbstractX509PIP extends AbstractPolicyInformationPoint {
             certChain = getCertificateChain(subject);
             if (certChain == null) {
                 continue;
+            }
+            // bug fix: complete cert chain up to trust anchor
+            certChain = completeCertificateChain(certChain);
+            if (log.isDebugEnabled()) {
+                int i = 0;
+                for (X509Certificate cert : certChain) {
+                    log.debug("certChain[{}]: {}", i++, cert.getSubjectX500Principal().getName(X500Principal.RFC2253));
+                }
             }
 
             endEntityCert = certChain[CertUtil.findClientCert(certChain)];
@@ -244,6 +258,7 @@ public abstract class AbstractX509PIP extends AbstractPolicyInformationPoint {
         }
 
         if (requireProxyCertificate && !proxyPresent) {
+            log.warn("Proxy is required, but none found");
             return null;
         }
 
@@ -301,5 +316,120 @@ public abstract class AbstractX509PIP extends AbstractPolicyInformationPoint {
         }
 
         return attributeCertificates.get(0);
+    }
+
+    /**
+     * Tries to complete the certificate chain up to a trust anchor from the eeTrustMaterial store.
+     * 
+     * When PKIX validation is enabled (checked with {@link #performsPKIXValidation()} method), the method will throw a
+     * {@link PIPProcessingException} if the chain can not be completed. Otherwise, only a warning is logged.
+     * 
+     * @param certChain the certificate chain to complete
+     * @return the completed cert chain
+     * @throws PIPProcessingException if PKIX validation is enabled and an error occurs while building
+     * the complete cert chain
+     */
+    @SuppressWarnings("unchecked")
+    private X509Certificate[] completeCertificateChain(X509Certificate[] certChain) throws PIPProcessingException {
+        if (certChain == null) {
+            return null;
+        }
+        if (certChain.length < 1) {
+            return certChain;
+        }
+        // get the trust anchors store
+        Hashtable<String, Vector<X509Certificate>> certificates = eeTrustMaterial.getCAs();
+
+        Vector<X509Certificate> certChainVector = new Vector<X509Certificate>();
+
+        X509Certificate currentCert = certChain[0];
+        certChainVector.add(currentCert);
+
+        // check the original cert chain
+        log.debug("Checking original certChain.length= {}", certChain.length);
+        for (int i = 1; i < certChain.length; i++) {
+            if (PKIUtils.checkIssued(certChain[i], certChain[i - 1])) {
+                if (log.isDebugEnabled()) {
+                    log.debug("checkIssued: YES: {} issued {}", certChain[i].getSubjectX500Principal().getName(
+                            X500Principal.RFC2253), certChain[i - 1].getSubjectX500Principal().getName(
+                            X500Principal.RFC2253));
+                }
+                currentCert = certChain[i];
+                certChainVector.add(currentCert);
+            }
+        }
+
+        log.debug("is trust anchor? {}" + currentCert.getSubjectX500Principal().getName(X500Principal.RFC2253));
+
+        // check that currentCert is self signed and in ca store (trusted anchor).
+        if (PKIUtils.selfIssued(currentCert)) {
+            String hash = PKIUtils.getHash(currentCert);
+            Vector<X509Certificate> trustAnchors = certificates.get(hash);
+            if (trustAnchors == null || trustAnchors.indexOf(currentCert) == -1) {
+                String errorMessage = "Certificate "
+                        + currentCert.getSubjectX500Principal().getName(X500Principal.RFC2253)
+                        + " is self signed, but not a trust anchor";
+                if (performsPKIXValidation()) {
+                    log.error("PKIX validation failed: " + errorMessage);
+                    throw new PIPProcessingException(errorMessage);
+                } 
+                else {
+                    log.warn(errorMessage);
+                }
+            } 
+            else {
+                log.debug("YES: {} is a valid trust anchor", currentCert.getSubjectX500Principal().getName(
+                        X500Principal.RFC2253));
+            }
+        } 
+        else {
+            log.debug("NO: looking for trust anchor for {}",currentCert.getSubjectX500Principal().getName(X500Principal.RFC2253));
+            // and complete the certification path.
+            do {
+                // find trusted issuer
+                String hash = PKIUtils.getHash(currentCert.getIssuerX500Principal());
+                Vector<X509Certificate> issuers = certificates.get(hash);
+                if (log.isTraceEnabled()) {
+                    log.trace("Issuers({}): {}", hash, issuers);
+                }
+                if (issuers != null) {
+                    for (X509Certificate issuer : issuers) {
+                        if (PKIUtils.checkIssued(issuer, currentCert)) {
+                            if (log.isDebugEnabled()) {
+                                log.debug("checkIssued: YES: {} issued {}", issuer.getSubjectX500Principal().getName(
+                                        X500Principal.RFC2253), currentCert.getSubjectX500Principal().getName(
+                                        X500Principal.RFC2253));
+                            }
+                            currentCert = issuer;
+                            certChainVector.add(currentCert);
+                            if (log.isDebugEnabled()) {
+                                log.debug("currentCert: {}", currentCert.getSubjectX500Principal().getName(X500Principal.RFC2253));
+                            }
+                            break;
+                        }
+                    }
+                } else {
+                    String errorMessage = "No trust anchor found for certificate "
+                            + currentCert.getSubjectX500Principal().getName(X500Principal.RFC2253);
+                    if (performsPKIXValidation()) {
+                        log.error("PKIX validation failed: " + errorMessage);
+                        throw new PIPProcessingException(errorMessage);
+                    } else {
+                        log.warn(errorMessage);
+                        // exit while loop
+                        break;
+                    }
+                }
+            } while (!PKIUtils.selfIssued(currentCert));
+        } // else
+
+        if (log.isTraceEnabled()) {
+            int i = 0;
+            for (X509Certificate cert : certChainVector) {
+                log.trace("completed chain[{}]: {}", i++, cert.getSubjectX500Principal().getName(X500Principal.RFC2253));
+            }
+        }
+
+        return certChainVector.toArray(new X509Certificate[certChainVector.size()]);
     }
 }
