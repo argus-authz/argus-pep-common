@@ -26,6 +26,7 @@ import junit.framework.TestCase;
 
 /**
  * JUnit for pool account management and mapping
+ * for bug https://savannah.cern.ch/bugs/?66574
  */
 public class GridMapDirPoolAccountManagerTest extends TestCase {
 
