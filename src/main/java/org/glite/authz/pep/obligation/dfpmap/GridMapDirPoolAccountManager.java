@@ -53,8 +53,10 @@ public class GridMapDirPoolAccountManager implements PoolAccountManager {
     /**
      * Regexp pattern used to identify pool account names. Contains a single group match whose value is the pool account
      * name prefix.
+     * 
+     * Bug fix: https://savannah.cern.ch/bugs/?66574
      */
-    private final Pattern poolAccountNamePattern;
+    private final Pattern poolAccountNamePattern= Pattern.compile("^(\\w*[a-zA-z])\\d+$");
 
     /**
      * Constructor.
@@ -77,7 +79,6 @@ public class GridMapDirPoolAccountManager implements PoolAccountManager {
         }
 
         gridMapDirectory = gridMapDir;
-        poolAccountNamePattern = Pattern.compile("^(\\p{Alpha}*)\\p{Digit}*$");
     }
 
     /** {@inheritDoc} */
@@ -100,7 +101,7 @@ public class GridMapDirPoolAccountManager implements PoolAccountManager {
 
     /** {@inheritDoc} */
     public List<String> getPoolAccountNames() {
-        return Arrays.asList(getAccountFileNames(Strings.safeTrimOrNullString(null)));
+        return Arrays.asList(getAccountFileNames(null));
     }
 
     /** {@inheritDoc} */
@@ -126,30 +127,22 @@ public class GridMapDirPoolAccountManager implements PoolAccountManager {
             List<String> secondaryGroups) throws ObligationProcessingException {
         String subjectIdentifier = buildSubjectIdentifier(subjectDN, primaryGroup, secondaryGroups);
 
-        log
-                .debug(
-                        "Checking if there is an existing account mapping for subject {} with primary group {} and secondary groups {}",
-                        new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups });
+        log.debug("Checking if there is an existing account mapping for subject {} with primary group {} and secondary groups {}",
+                  new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups });
         String accountName = getAccountNameByKey(accountNamePrefix, subjectIdentifier);
         if (accountName != null) {
-            log
-                    .debug(
-                            "An existing account mapping has mapped subject {} with primary group {} and secondary groups {} to pool account {}",
-                            new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups, accountName });
+            log.debug("An existing account mapping has mapped subject {} with primary group {} and secondary groups {} to pool account {}",
+                      new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups, accountName });
             return accountName;
         }
 
         accountName = createMapping(accountNamePrefix, subjectIdentifier);
         if (accountName != null) {
-            log
-                    .debug(
-                            "A new account mapping has mapped subject {} with primary group {} and secondary groups {} to pool account {}",
-                            new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups, accountName });
+            log.debug("A new account mapping has mapped subject {} with primary group {} and secondary groups {} to pool account {}",
+                      new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups, accountName });
         } else {
-            log
-                    .debug(
-                            "No pool account was available to which subject {} with primary group {} and secondary groups {} could be mapped",
-                            new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups });
+            log.debug("No pool account was available to which subject {} with primary group {} and secondary groups {} could be mapped",
+                      new Object[] { subjectDN.getName(), primaryGroup, secondaryGroups });
         }
         return accountName;
     }
@@ -282,11 +275,11 @@ public class GridMapDirPoolAccountManager implements PoolAccountManager {
             public boolean accept(File dir, String name) {
                 Matcher nameMatcher = poolAccountNamePattern.matcher(name);
                 if (nameMatcher.matches()) {
-                    if (prefix == null || name.startsWith(prefix)) {
+                    // BUG FIX: https://savannah.cern.ch/bugs/?66574
+                    if (prefix == null || prefix.equals(nameMatcher.group(1))) {
                         return true;
                     }
                 }
-
                 return false;
             }
         });
@@ -304,11 +297,11 @@ public class GridMapDirPoolAccountManager implements PoolAccountManager {
             public boolean accept(File dir, String name) {
                 Matcher nameMatcher = poolAccountNamePattern.matcher(name);
                 if (nameMatcher.matches()) {
-                    if (prefix == null || name.startsWith(prefix)) {
+                    // BUG FIX: https://savannah.cern.ch/bugs/?66574
+                    if (prefix == null || prefix.equals(nameMatcher.group(1))) {
                         return true;
                     }
                 }
-
                 return false;
             }
         });
