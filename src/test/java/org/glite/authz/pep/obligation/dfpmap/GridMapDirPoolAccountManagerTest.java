@@ -22,11 +22,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.security.auth.x500.X500Principal;
+
 import junit.framework.TestCase;
 
 /**
- * JUnit for pool account management and mapping
- * for bug https://savannah.cern.ch/bugs/?66574
+ * JUnit for pool account management and mapping for bug https://savannah.cern.ch/bugs/?66574
  */
 public class GridMapDirPoolAccountManagerTest extends TestCase {
 
@@ -84,14 +85,14 @@ public class GridMapDirPoolAccountManagerTest extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         gridmapdir = createTempGridMapDir();
-        System.out.println("setUp: temp gridmapdir: " + gridmapdir);
+        // System.out.println("setUp: temp gridmapdir: " + gridmapdir);
         gridmapPool = new GridMapDirPoolAccountManager(gridmapdir);
     }
 
     /** {@inheritDoc} */
     protected void tearDown() throws Exception {
         super.tearDown();
-        System.out.println("tearDown: delete temp gridmapdir: " + gridmapdir);
+        // System.out.println("tearDown: delete temp gridmapdir: " + gridmapdir);
         assertTrue("Failed to delete temp gridmapdir: " + gridmapdir, deleteTempGridMapDir(gridmapdir));
     }
 
@@ -123,9 +124,17 @@ public class GridMapDirPoolAccountManagerTest extends TestCase {
 
     public void testCreateMapping() {
         String prefix = "dteam";
-        String subject = "CN=Valery%20Tschopp%209FEE5EE3";
-        String accountName = gridmapPool.createMapping(prefix, subject);
-        System.out.println(subject + " mapped to " + accountName);
+        String identifier = "%2fcn%3djohn%20doe:dteam";
+        String accountName = gridmapPool.createMapping(prefix, identifier);
+        System.out.println(identifier + " mapped to " + accountName);
+        assertTrue(accountName + " doesn't match dteam pool", accountName.matches(prefix + "\\d+"));
+    }
+
+    public void testMapToAccount() throws Exception {
+        String prefix = "dteam";
+        String subject = "CN=John Doe";
+        X500Principal principal = new X500Principal(subject);
+        String accountName = gridmapPool.mapToAccount(prefix, principal, prefix, null);
         assertTrue(accountName + " doesn't match dteam pool", accountName.matches(prefix + "\\d+"));
     }
 }
