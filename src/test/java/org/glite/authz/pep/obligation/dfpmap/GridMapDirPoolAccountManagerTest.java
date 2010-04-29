@@ -55,13 +55,15 @@ public class GridMapDirPoolAccountManagerTest extends TestCase {
             for (int i = 1; i <= N_POOL; i++) {
                 File f = new File(temp, prefix + "0" + i);
                 f.createNewFile();
+                f.deleteOnExit();
             }
         }
         // create invalid files
         for (String invalid : invalids) {
             for (int i = 1; i <= N_POOL; i++) {
-                File f = new File(invalid);
+                File f = new File(temp,invalid);
                 f.createNewFile();
+                f.deleteOnExit();
             }
         }
         return temp;
