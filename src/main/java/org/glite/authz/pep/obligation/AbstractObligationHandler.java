@@ -32,7 +32,7 @@ import org.glite.authz.common.util.Strings;
  * Obligation handlers <strong>must</strong> be stateless.
  */
 @ThreadSafe
-public abstract class AbstractObligationHandler {
+public abstract class AbstractObligationHandler implements ObligationHandler {
 
     /** ID of the handled obligation. */
     private String id;
@@ -93,7 +93,7 @@ public abstract class AbstractObligationHandler {
      * 
      * @throws ObligationProcessingException thrown if there is a problem evaluating this handler
      */
-    public abstract void evaluateObligation(Request request, Result result) throws ObligationProcessingException;
+    public abstract boolean evaluateObligation(Request request, Result result) throws ObligationProcessingException;
 
     /** {@inheritDoc} */
     public int hashCode() {

@@ -81,7 +81,8 @@ public class DFPMObligationHandler extends AbstractObligationHandler {
     }
 
     /** {@inheritDoc} */
-    public void evaluateObligation(Request request, Result result) throws ObligationProcessingException {
+    public boolean evaluateObligation(Request request, Result result) throws ObligationProcessingException {
+        boolean applied= false;
         Subject subject = getSubject(request);
 
         X500Principal subjectDN = getDN(subject);
@@ -92,6 +93,7 @@ public class DFPMObligationHandler extends AbstractObligationHandler {
 
         if (mappedAccount != null) {
             addPosixMappingObligation(result, mappedAccount);
+            applied= true;
 
             // Remove the local environment mapping obligation (even if it appears multiple times)
             // since we've handled it and replaced it with the POSIX mapping obligations
@@ -108,6 +110,7 @@ public class DFPMObligationHandler extends AbstractObligationHandler {
         }
         log.debug("Finished processing DN/FQAN to POSIX account mapping obligation for subject {}", subjectDN
                         .getName());
+        return applied;
     }
 
     /**
