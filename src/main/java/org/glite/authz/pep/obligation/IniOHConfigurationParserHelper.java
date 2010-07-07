@@ -84,7 +84,7 @@ public class IniOHConfigurationParserHelper {
      * @throws ConfigurationException throw if a obligation handler can not be instantiated
      */
     @SuppressWarnings("unchecked")
-    private static AbstractObligationHandler buildObligationHandler(Section ohConfig,
+    private static ObligationHandler buildObligationHandler(Section ohConfig,
             AbstractConfigurationBuilder<?> configBuilder) throws ConfigurationException {
         LOG.info("Loading Obligation Handler {}", ohConfig.getName());
         String parserClassName = IniConfigUtil.getString(ohConfig, IniOHConfigurationParser.PARSER_CLASS_PROP);

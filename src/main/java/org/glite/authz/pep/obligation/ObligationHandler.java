@@ -45,4 +45,10 @@ public interface ObligationHandler {
     public boolean evaluateObligation(Request request, Result result)
             throws ObligationProcessingException;
 
+    /**
+     * Gets the precedence of the handler.
+     * 
+     * @return precedence of the handler
+     */
+    public int getHandlerPrecedence();
 }

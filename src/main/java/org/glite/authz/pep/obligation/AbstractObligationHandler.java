@@ -19,8 +19,6 @@ package org.glite.authz.pep.obligation;
 
 import net.jcip.annotations.ThreadSafe;
 
-import org.glite.authz.common.model.Request;
-import org.glite.authz.common.model.Result;
 import org.glite.authz.common.util.Strings;
 
 /**
@@ -84,16 +82,6 @@ public abstract class AbstractObligationHandler implements ObligationHandler {
     public int getHandlerPrecedence() {
         return precedence;
     }
-
-    /**
-     * Evaluates the obligation represented by this handler.
-     * 
-     * @param request the authorization request
-     * @param result the result being processed
-     * 
-     * @throws ObligationProcessingException thrown if there is a problem evaluating this handler
-     */
-    public abstract boolean evaluateObligation(Request request, Result result) throws ObligationProcessingException;
 
     /** {@inheritDoc} */
     public int hashCode() {

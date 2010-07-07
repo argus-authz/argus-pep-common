@@ -48,12 +48,12 @@ public class ObligationService {
     private ReentrantReadWriteLock rwLock;
 
     /** Registered obligation handlers. */
-    private Set<AbstractObligationHandler> obligationHandlers;
+    private Set<ObligationHandler> obligationHandlers;
 
     /** Constructor. */
     public ObligationService() {
         rwLock = new ReentrantReadWriteLock(true);
-        obligationHandlers = new TreeSet<AbstractObligationHandler>(new ObligationHandlerComparator());
+        obligationHandlers = new TreeSet<ObligationHandler>(new ObligationHandlerComparator());
     }
 
     /**
@@ -61,7 +61,7 @@ public class ObligationService {
      * 
      * @return registered obligation handlers
      */
-    public Set<AbstractObligationHandler> getObligationHandlers() {
+    public Set<ObligationHandler> getObligationHandlers() {
         return Collections.unmodifiableSet(obligationHandlers);
     }
 
@@ -72,7 +72,7 @@ public class ObligationService {
      * 
      * @param handler the handler to add to the list of registered handlers.
      */
-    public void addObligationhandler(AbstractObligationHandler handler) {
+    public void addObligationhandler(ObligationHandler handler) {
         if (handler == null) {
             return;
         }
@@ -93,7 +93,7 @@ public class ObligationService {
      * 
      * @param handlers the collection of handlers to add to the list of registered handlers.
      */
-    public void addObligationhandler(Collection<AbstractObligationHandler> handlers) {
+    public void addObligationhandlers(Collection<ObligationHandler> handlers) {
         if (handlers == null || handlers.isEmpty()) {
             return;
         }
@@ -114,7 +114,7 @@ public class ObligationService {
      * 
      * @param handler the handler to remove from the list of registered handlers.
      */
-    public void removeObligationHandler(AbstractObligationHandler handler) {
+    public void removeObligationHandler(ObligationHandler handler) {
         if (handler == null) {
             return;
         }
@@ -142,11 +142,11 @@ public class ObligationService {
         Lock readLock = rwLock.readLock();
         readLock.lock();
         try {
-            Iterator<AbstractObligationHandler> handlerItr = obligationHandlers.iterator();
+            Iterator<ObligationHandler> handlerItr = obligationHandlers.iterator();
             Map<String, Obligation> effectiveObligations = preprocessObligations(result);
             log.debug("Obligations in effect for this result: {}", effectiveObligations.keySet());
 
-            AbstractObligationHandler handler;
+            ObligationHandler handler;
             while (handlerItr.hasNext()) {
                 handler = handlerItr.next();
                 if (effectiveObligations.containsKey(handler.getObligationId())) {
@@ -186,10 +186,10 @@ public class ObligationService {
     }
 
     /** Comparator used to order obligation handlers by precedence. */
-    private class ObligationHandlerComparator implements Comparator<AbstractObligationHandler> {
+    private class ObligationHandlerComparator implements Comparator<ObligationHandler> {
 
         /** {@inheritDoc} */
-        public int compare(AbstractObligationHandler o1, AbstractObligationHandler o2) {
+        public int compare(ObligationHandler o1, ObligationHandler o2) {
             if (o1.getHandlerPrecedence() == o2.getHandlerPrecedence()) {
                 // If they have the same precedence sort lexigraphically
                 return o1.getObligationId().compareTo(o2.getObligationId());

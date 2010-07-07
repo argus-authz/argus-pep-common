@@ -47,6 +47,6 @@ public interface IniOHConfigurationParser {
      * @throws ConfigurationException thrown if there is a problem creating the obligation handler from the given
      *             information
      */
-    public AbstractObligationHandler parse(Section iniConfig, AbstractConfigurationBuilder<?> configBuilder)
+    public ObligationHandler parse(Section iniConfig, AbstractConfigurationBuilder<?> configBuilder)
             throws ConfigurationException;
 }
