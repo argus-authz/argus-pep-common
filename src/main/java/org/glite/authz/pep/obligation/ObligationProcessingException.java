@@ -17,10 +17,8 @@
 
 package org.glite.authz.pep.obligation;
 
-import org.glite.authz.common.AuthorizationServiceException;
-
 /** Thrown when an {@link AbstractObligationHandler} fails to handle an obligation. */
-public class ObligationProcessingException extends AuthorizationServiceException {
+public class ObligationProcessingException extends Exception {
 
     /** Serial version UID. */
     private static final long serialVersionUID = -7787659159540080804L;
