@@ -17,9 +17,6 @@
 
 package org.glite.authz.pep.pip;
 
-import net.jcip.annotations.ThreadSafe;
-
-import org.glite.authz.common.AuthorizationServiceException;
 import org.glite.authz.common.model.Request;
 
 /**
@@ -40,7 +37,6 @@ import org.glite.authz.common.model.Request;
  * resource information</li>
  * </ul>
  */
-@ThreadSafe
 public interface PolicyInformationPoint {
 
     /**
@@ -65,14 +61,14 @@ public interface PolicyInformationPoint {
     /**
      * Stars the PIP. This is called so that the PIP may initialize itself before its first invocation.
      * 
-     * @throws AuthorizationServiceException thrown if there is a problem starting the PIP
+     * @throws PIPException thrown if there is a problem starting the PIP
      */
-    public void start() throws AuthorizationServiceException;
+    public void start() throws PIPException;
 
     /**
      * Stops the PIP. This is called so that the PIP may clean up any resource before the service shuts down.
      * 
-     * @throws AuthorizationServiceException throw if there is a problem stop the PIP
+     * @throws PIPException throw if there is a problem stop the PIP
      */
-    public void stop() throws AuthorizationServiceException;
+    public void stop() throws PIPException;
 }

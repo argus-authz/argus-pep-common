@@ -17,14 +17,14 @@
 
 package org.glite.authz.pep.pip;
 
-/** Thrown when an {@link PolicyInformationPoint} fails. */
-public class PIPProcessingException extends PIPException {
+/** Thrown when an {@link PolicyInformationPoint} error occurs. */
+public class PIPException extends Exception {
 
     /** Serial version UID. */
-    private static final long serialVersionUID = 6616470982835428775L;
+    private static final long serialVersionUID = 9069290765799490725L;
 
     /** Constructor. */
-    public PIPProcessingException() {
+    public PIPException() {
         super();
     }
 
@@ -33,7 +33,7 @@ public class PIPProcessingException extends PIPException {
      * 
      * @param message exception message
      */
-    public PIPProcessingException(String message) {
+    public PIPException(String message) {
         super(message);
     }
 
@@ -42,7 +42,7 @@ public class PIPProcessingException extends PIPException {
      * 
      * @param wrappedException exception to be wrapped by this one
      */
-    public PIPProcessingException(Exception wrappedException) {
+    public PIPException(Exception wrappedException) {
         super(wrappedException);
     }
 
@@ -52,7 +52,7 @@ public class PIPProcessingException extends PIPException {
      * @param message exception message
      * @param wrappedException exception to be wrapped by this one
      */
-    public PIPProcessingException(String message, Exception wrappedException) {
+    public PIPException(String message, Exception wrappedException) {
         super(message, wrappedException);
     }
 }
