@@ -19,12 +19,9 @@ package org.glite.authz.common.model;
 
 import java.io.Serializable;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.Strings;
+import org.glite.authz.common.model.util.Strings;
 
 /** The code for a {@link Status}. */
-@NotThreadSafe
 public final class StatusCode implements Serializable {
 
     /** Serial version UID. */

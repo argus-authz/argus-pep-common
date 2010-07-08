@@ -19,12 +19,9 @@ package org.glite.authz.common.model;
 
 import java.io.Serializable;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.Strings;
+import org.glite.authz.common.model.util.Strings;
 
 /** Status of an authorization request. */
-@NotThreadSafe
 public final class Status implements Serializable {
 
     /** Serial version UID. */

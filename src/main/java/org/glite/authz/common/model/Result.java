@@ -20,13 +20,10 @@ package org.glite.authz.common.model;
 import java.io.Serializable;
 import java.util.List;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazyList;
-import org.glite.authz.common.util.Strings;
+import org.glite.authz.common.model.util.LazyList;
+import org.glite.authz.common.model.util.Strings;
 
 /** Result of an authorization request. */
-@NotThreadSafe
 public final class Result implements Serializable {
 
     /** Decision Deny value, {@value} . */
@@ -54,7 +51,7 @@ public final class Result implements Serializable {
     private Status status;
 
     /** Obligations associated with the result. */
-    private LazyList<Obligation> obligations;
+    private List<Obligation> obligations;
 
     /** Constructor. */
     public Result() {
@@ -96,8 +93,8 @@ public final class Result implements Serializable {
      * @param newDecision decision of the authorization request
      */
     public void setDecision(int newDecision) {
-        if (decision != DECISION_DENY && decision != DECISION_PERMIT && decision != DECISION_INDETERMINATE
-                && decision != DECISION_NOT_APPLICABLE) {
+        if (newDecision != DECISION_DENY && newDecision != DECISION_PERMIT && newDecision != DECISION_INDETERMINATE
+                && newDecision != DECISION_NOT_APPLICABLE) {
             throw new IllegalArgumentException("Invalid decision value");
         }
         decision = newDecision;

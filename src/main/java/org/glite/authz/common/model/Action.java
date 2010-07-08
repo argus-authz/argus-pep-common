@@ -20,19 +20,16 @@ package org.glite.authz.common.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazySet;
+import org.glite.authz.common.model.util.LazySet;
 
 /** An attribute-based description of an action to be authorized. */
-@NotThreadSafe
 public final class Action implements Serializable {
 
     /** Serial version UID. */
     private static final long serialVersionUID = -2085506180809169465L;
 
     /** Attributes that identify the action. */
-    private LazySet<Attribute> attributes;
+    private Set<Attribute> attributes;
 
     /** Constructor. */
     public Action() {

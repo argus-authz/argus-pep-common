@@ -20,17 +20,14 @@ package org.glite.authz.common.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazySet;
-import org.glite.authz.common.util.Strings;
+import org.glite.authz.common.model.util.LazySet;
+import org.glite.authz.common.model.util.Strings;
 
 /**
  * An attribute that identifies either a {@link Subject}, {@link Resource}, {@link Environment} or {@link Action}.
  * 
  * If no data type is given for an attribute the data type defaults to {@value #DT_STRING}.
  */
-@NotThreadSafe
 public final class Attribute implements Serializable {
 
     /** The string data type URI, {@value} . */
@@ -154,9 +151,9 @@ public final class Attribute implements Serializable {
     private String issuer;
 
     /** Values of the attribute. */
-    private LazySet<Object> values;
+    private Set<Object> values;
 
-    /** Constructor. */
+    /** Constructor. Default DataType is <code>#string</code> */
     public Attribute() {
         dataType = DT_STRING;
         values = new LazySet<Object>();

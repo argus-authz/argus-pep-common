@@ -20,13 +20,10 @@ package org.glite.authz.common.model;
 import java.io.Serializable;
 import java.util.List;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazyList;
-import org.glite.authz.common.util.Strings;
+import org.glite.authz.common.model.util.LazyList;
+import org.glite.authz.common.model.util.Strings;
 
 /** Description of an obligation that must be performed by the PEP. */
-@NotThreadSafe
 public final class Obligation implements Serializable {
 
     /** Serial version UID. */
@@ -39,7 +36,7 @@ public final class Obligation implements Serializable {
     private int fulfillOn;
 
     /** Any attribute assignments associated with the obligation. */
-    private LazyList<AttributeAssignment> attributeAssignments;
+    private List<AttributeAssignment> attributeAssignments;
 
     /** Constructor. */
     public Obligation() {
@@ -80,7 +77,7 @@ public final class Obligation implements Serializable {
      * @param newFulfillOn authorization decision which activates this obligation
      */
     public void setFulfillOn(int newFulfillOn) {
-        if (fulfillOn != Result.DECISION_DENY && fulfillOn != Result.DECISION_PERMIT) {
+        if (newFulfillOn != Result.DECISION_DENY && newFulfillOn != Result.DECISION_PERMIT) {
             throw new IllegalArgumentException("Invalid FulfillOn value");
         }
         fulfillOn = newFulfillOn;

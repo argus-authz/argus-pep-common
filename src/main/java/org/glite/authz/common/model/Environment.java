@@ -20,19 +20,16 @@ package org.glite.authz.common.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazySet;
+import org.glite.authz.common.model.util.LazySet;
 
 /** An attribute-based description of the environment in which an {@link Action} is to be performed. */
-@NotThreadSafe
 public final class Environment implements Serializable {
 
     /** Serial version UID. */
     private static final long serialVersionUID = 4988368497865461384L;
 
     /** Attributes describing the environment. */
-    private LazySet<Attribute> attributes;
+    private Set<Attribute> attributes;
 
     /** Constructor. */
     public Environment() {

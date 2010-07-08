@@ -20,13 +20,10 @@ package org.glite.authz.common.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazySet;
-import org.glite.authz.common.util.Strings;
+import org.glite.authz.common.model.util.LazySet;
+import org.glite.authz.common.model.util.Strings;
 
 /** An attribute-based description of the resource within which an {@link Action} to be authorized is made. */
-@NotThreadSafe
 public final class Resource implements Serializable {
 
     /** Serial version UID. */
@@ -36,7 +33,7 @@ public final class Resource implements Serializable {
     private String resourceContent;
 
     /** Attributes that describe the resource. */
-    private LazySet<Attribute> attributes;
+    private Set<Attribute> attributes;
 
     /** Constructor. */
     public Resource() {

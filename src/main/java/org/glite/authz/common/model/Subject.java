@@ -20,13 +20,10 @@ package org.glite.authz.common.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazySet;
-import org.glite.authz.common.util.Strings;
+import org.glite.authz.common.model.util.LazySet;
+import org.glite.authz.common.model.util.Strings;
 
 /** Attribute-based description of the subject of an authorization request. */
-@NotThreadSafe
 public final class Subject implements Serializable {
 
     /** Serial version UID. */
@@ -36,7 +33,7 @@ public final class Subject implements Serializable {
     private String category;
 
     /** Attributes describing the subject. */
-    private LazySet<Attribute> attributes;
+    private Set<Attribute> attributes;
 
     /** Constructor. */
     public Subject() {

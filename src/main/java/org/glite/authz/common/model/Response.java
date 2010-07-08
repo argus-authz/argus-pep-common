@@ -20,12 +20,9 @@ package org.glite.authz.common.model;
 import java.io.Serializable;
 import java.util.List;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazyList;
+import org.glite.authz.common.model.util.LazyList;
 
 /** Response for an authorization {@link Request}. */
-@NotThreadSafe
 public final class Response implements Serializable {
 
     /** Serial version UID. */
@@ -35,7 +32,7 @@ public final class Response implements Serializable {
     private Request request;
 
     /** The results from an authorization request. */
-    private LazyList<Result> results;
+    private List<Result> results;
 
     /** Constructor. */
     public Response() {

@@ -20,22 +20,19 @@ package org.glite.authz.common.model;
 import java.io.Serializable;
 import java.util.Set;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazySet;
+import org.glite.authz.common.model.util.LazySet;
 
 /** An authorization request. */
-@NotThreadSafe
 public final class Request implements Serializable {
 
     /** Serial version UID. */
     private static final long serialVersionUID = 7263488106115027959L;
 
     /** Subjects about which the request is being made. */
-    private LazySet<Subject> subjects;
+    private Set<Subject> subjects;
 
     /** Resources about which the request is being made. */
-    private LazySet<Resource> resources;
+    private Set<Resource> resources;
 
     /** The action to be authorized. */
     private Action action;
