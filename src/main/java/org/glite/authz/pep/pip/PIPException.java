@@ -17,7 +17,12 @@
 
 package org.glite.authz.pep.pip;
 
-/** Thrown when an {@link PolicyInformationPoint} error occurs. */
+/**
+ * Thrown when an {@link PolicyInformationPoint} fails to start or stop.
+ * 
+ * @see PolicyInformationPoint#start()
+ * @see PolicyInformationPoint#stop()
+ */
 public class PIPException extends Exception {
 
     /** Serial version UID. */

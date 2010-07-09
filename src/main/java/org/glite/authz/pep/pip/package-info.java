@@ -16,7 +16,7 @@
  */
 
 /**
- * Policy Information Point interface for the PEP client and daemon.
+ * Policy Information Point (PIP) interface for the PEP client and daemon.
  */
 
 package org.glite.authz.pep.pip;

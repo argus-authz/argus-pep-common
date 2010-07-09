@@ -16,7 +16,7 @@
  */
 
 /**
- * Obligation handler interface for the PEP client and daemon.
+ * Obligation Handler (OH) interface for the PEP client and daemon.
  */
 
 package org.glite.authz.pep.obligation;

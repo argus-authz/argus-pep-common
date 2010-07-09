@@ -17,7 +17,11 @@
 
 package org.glite.authz.pep.pip;
 
-/** Thrown when an {@link PolicyInformationPoint} fails. */
+/**
+ * Thrown when a {@link PolicyInformationPoint} error occurs when populating the request.
+ * 
+ * @see PolicyInformationPoint#populateRequest(org.glite.authz.common.model.Request)
+ */
 public class PIPProcessingException extends PIPException {
 
     /** Serial version UID. */

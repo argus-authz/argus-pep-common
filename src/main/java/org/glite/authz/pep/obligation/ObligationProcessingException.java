@@ -17,7 +17,11 @@
 
 package org.glite.authz.pep.obligation;
 
-/** Thrown when an {@link AbstractObligationHandler} fails to handle an obligation. */
+/**
+ * Thrown when an {@link ObligationHandler} error occurs while evaluating the request and response.
+ * 
+ * @see ObligationHandler#evaluateObligation(org.glite.authz.common.model.Request, org.glite.authz.common.model.Result)
+ */
 public class ObligationProcessingException extends Exception {
 
     /** Serial version UID. */
