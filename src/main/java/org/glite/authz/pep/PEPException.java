@@ -15,23 +15,18 @@
  * limitations under the License.
  */
 
-package org.glite.authz.pep.pip;
-
-import org.glite.authz.pep.PEPException;
+package org.glite.authz.pep;
 
 /**
- * Thrown when an {@link PolicyInformationPoint} fails to start or stop.
- * 
- * @see PolicyInformationPoint#start()
- * @see PolicyInformationPoint#stop()
+ * Base exception for the PEP server and client
  */
-public class PIPException extends PEPException {
+public class PEPException extends Exception {
 
     /** Serial version UID. */
-    private static final long serialVersionUID = 9069290765799490725L;
+    private static final long serialVersionUID = 897224333945805175L;
 
     /** Constructor. */
-    public PIPException() {
+    public PEPException() {
         super();
     }
 
@@ -40,7 +35,7 @@ public class PIPException extends PEPException {
      * 
      * @param message exception message
      */
-    public PIPException(String message) {
+    public PEPException(String message) {
         super(message);
     }
 
@@ -49,7 +44,7 @@ public class PIPException extends PEPException {
      * 
      * @param wrappedException exception to be wrapped by this one
      */
-    public PIPException(Exception wrappedException) {
+    public PEPException(Exception wrappedException) {
         super(wrappedException);
     }
 
@@ -59,7 +54,7 @@ public class PIPException extends PEPException {
      * @param message exception message
      * @param wrappedException exception to be wrapped by this one
      */
-    public PIPException(String message, Exception wrappedException) {
+    public PEPException(String message, Exception wrappedException) {
         super(message, wrappedException);
     }
 }

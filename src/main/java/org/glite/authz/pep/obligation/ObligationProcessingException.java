@@ -17,12 +17,14 @@
 
 package org.glite.authz.pep.obligation;
 
+import org.glite.authz.pep.PEPException;
+
 /**
  * Thrown when an {@link ObligationHandler} error occurs while evaluating the request and response.
  * 
  * @see ObligationHandler#evaluateObligation(org.glite.authz.common.model.Request, org.glite.authz.common.model.Result)
  */
-public class ObligationProcessingException extends Exception {
+public class ObligationProcessingException extends PEPException {
 
     /** Serial version UID. */
     private static final long serialVersionUID = -7787659159540080804L;
