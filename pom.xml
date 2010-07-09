@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.glite.authz</groupId>
     <artifactId>pep-common</artifactId>
-    <name>Argus Authorization Service: PEP Java Common Libray</name>
+    <name>Argus Authorization Service: PEP Java Common Library</name>
     <version>2.0.0</version>
 
     <description>XACML based authorization service developed within the gLite project.
@@ -16,10 +16,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <slf4j.groupId>org.slf4j</slf4j.groupId>
-        <slf4j.version>1.5.8</slf4j.version>
-        <logback.groupId>ch.qos.logback</logback.groupId>
-        <logback.version>0.9.18</logback.version>
     </properties>
 
     <repositories>
