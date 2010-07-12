@@ -73,7 +73,16 @@ public final class Result implements Serializable {
      * @return numeric decision code's equivalent XACML string
      */
     public String getDecisionString() {
-        switch (decision) {
+        return decisionToString(decision);
+    }
+
+    /**
+     * Helper method for converting the numeric decision code to its equivalent XACML string.
+     * 
+     * @return numeric decision code's equivalent XACML string
+     */
+    static public String decisionToString(int decisionValue) {
+        switch (decisionValue) {
             case 0:
                 return "Deny";
             case 1:
@@ -84,9 +93,9 @@ public final class Result implements Serializable {
                 return "NotApplicable";
             default:
                 return null;
-        }
+        }        
     }
-
+    
     /**
      * Sets the decision of the authorization request.
      * 
