@@ -21,6 +21,8 @@ import org.glite.authz.common.model.Result;
 
 /**
  * Obligation Handler interface
+ * 
+ * <p>Obligation handlers <strong>must</strong> be stateless.
  */
 public interface ObligationHandler {
 
@@ -40,7 +42,7 @@ public interface ObligationHandler {
      *            the result being processed
      * @return <code>true</code> if the obligation handler applied to the result
      * @throws ObligationProcessingException
-     *             thrown if there is a problem evaluating this handler
+     *             thrown if there is a problem processing this handler
      */
     public boolean evaluateObligation(Request request, Result result)
             throws ObligationProcessingException;
