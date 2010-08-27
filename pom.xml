@@ -10,7 +10,7 @@
         <version>1.2.0</version>
         <relativePath>../org.glite.authz</relativePath>
     </parent>
-    <name>Argus Authorization Service: PEP server and client common library</name>
+    <name>Argus PEP server and client common library</name>
     <artifactId>pep-common</artifactId>
     <version>2.0.0</version>
     <packaging>jar</packaging>
