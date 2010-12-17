@@ -153,10 +153,34 @@ public final class Attribute implements Serializable {
     /** Values of the attribute. */
     private Set<Object> values;
 
-    /** Constructor. Default DataType is <code>#string</code> */
+    /** Constructor. Default DataType is {@value #DT_STRING} */
     public Attribute() {
         dataType = DT_STRING;
         values = new LazySet<Object>();
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param id The attribute identifier
+     * @param dataType The attribute data type
+     * @param issuer The attribute issuer
+     */
+    public Attribute(String id, String dataType, String issuer) {
+        this();
+        this.id = Strings.safeTrimOrNullString(id);
+        this.dataType = Strings.safeTrimOrNullString(dataType);
+        this.issuer = Strings.safeTrimOrNullString(issuer);
+    }
+
+    /**
+     * Constructor
+     * 
+     * @param id The attribute identifier
+     * @param dataType The attribute data type
+     */
+    public Attribute(String id, String dataType) {
+        this(id, dataType, null);
     }
 
     /**
