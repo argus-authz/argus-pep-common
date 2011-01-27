@@ -80,7 +80,11 @@ public final class Response implements Serializable {
                 stringBuilder.append(", ");
             }
         }
-        stringBuilder.append("]}");
+        stringBuilder.append("]");
+        if (request!=null) {
+            stringBuilder.append(", request: ").append(request);
+        }
+        stringBuilder.append("}");
         return stringBuilder.toString();
     }
 
