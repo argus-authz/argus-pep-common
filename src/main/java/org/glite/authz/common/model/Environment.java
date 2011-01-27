@@ -49,8 +49,8 @@ public final class Environment implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Environment {");
-        stringBuilder.append("values: [");
+        stringBuilder.append("Environment{ ");
+        stringBuilder.append("values:[");
         Iterator<Attribute> iterator= attributes.iterator();
         while (iterator.hasNext()) {
             Attribute attribute = (Attribute) iterator.next();

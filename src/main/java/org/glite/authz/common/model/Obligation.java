@@ -96,9 +96,9 @@ public final class Obligation implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Obligation {");
+        stringBuilder.append("Obligation{ ");
         stringBuilder.append("id: ").append(id).append(", ");
-        stringBuilder.append("fulfillOn: ").append(fulfillOn).append(", ");
+        stringBuilder.append("fulfillOn(").append(fulfillOn).append("): ").append(Result.decisionToString(fulfillOn)).append(", ");
 
         stringBuilder.append("attributeAssingments: [");
         Iterator<AttributeAssignment> iterator= attributeAssignments.iterator();

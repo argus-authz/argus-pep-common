@@ -259,11 +259,11 @@ public final class Attribute implements Serializable {
     /** {@inheritDoc}. */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Attribute {");
+        stringBuilder.append("Attribute{ ");
         stringBuilder.append("id: ").append(id).append(", ");
         stringBuilder.append("dataType: ").append(dataType).append(", ");
         stringBuilder.append("issuer: ").append(issuer).append(", ");
-        stringBuilder.append("values: [");
+        stringBuilder.append("values:[");
         Iterator<Object> iterator= values.iterator();
         while (iterator.hasNext()) {
             Object value = (Object) iterator.next();

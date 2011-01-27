@@ -71,9 +71,9 @@ public final class Subject implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Subject {");
+        stringBuilder.append("Subject{ ");
         stringBuilder.append("category: ").append(category).append(", ");
-        stringBuilder.append("attributes: [");
+        stringBuilder.append("attributes:[");
         Iterator<Attribute> iterator= attributes.iterator();
         while (iterator.hasNext()) {
             Attribute attribute = (Attribute) iterator.next();

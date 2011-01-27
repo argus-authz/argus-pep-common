@@ -158,11 +158,11 @@ public final class Result implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Result {");
-        stringBuilder.append("decision: ").append(decisionToString(decision)).append(", ");
+        stringBuilder.append("Result{ ");
+        stringBuilder.append("decision(").append(decision).append("): ").append(decisionToString(decision)).append(", ");
         stringBuilder.append("resourceId: ").append(resourceId).append(", ");
         stringBuilder.append("status: ").append(status).append(", ");
-        stringBuilder.append("obligations: [");
+        stringBuilder.append("obligations:[");
         Iterator<Obligation> iterator= obligations.iterator();
         while (iterator.hasNext()) {
             Obligation obligation = (Obligation) iterator.next();

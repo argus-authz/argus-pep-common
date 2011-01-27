@@ -70,8 +70,8 @@ public final class Response implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Response {");
-        stringBuilder.append("results: [");
+        stringBuilder.append("Response{ ");
+        stringBuilder.append("results:[");
         Iterator<Result> iterator= results.iterator();
         while (iterator.hasNext()) {
             Result result = (Result) iterator.next();

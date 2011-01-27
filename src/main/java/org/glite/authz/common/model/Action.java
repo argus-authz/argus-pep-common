@@ -49,8 +49,8 @@ public final class Action implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Action {");
-        stringBuilder.append("attributes: [");
+        stringBuilder.append("Action{ ");
+        stringBuilder.append("attributes:[");
         Iterator<Attribute> iterator= attributes.iterator();
         while (iterator.hasNext()) {
             Attribute attribute = (Attribute) iterator.next();

@@ -71,10 +71,10 @@ public final class Resource implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Resource {");
-        stringBuilder.append("resourceContent: ").append(resourceContent).append(", ");
+        stringBuilder.append("Resource{ ");
+        stringBuilder.append("content: ").append(resourceContent).append(", ");
 
-        stringBuilder.append("attributes: [");
+        stringBuilder.append("attributes:[");
         Iterator<Attribute> iterator= attributes.iterator();
         while (iterator.hasNext()) {
             Attribute attribute = (Attribute) iterator.next();

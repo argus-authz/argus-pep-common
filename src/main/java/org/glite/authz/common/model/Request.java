@@ -104,8 +104,8 @@ public final class Request implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Request {");
-        stringBuilder.append("subjects: [");
+        stringBuilder.append("Request{ ");
+        stringBuilder.append("subjects:[");
         Iterator<Subject> iterator= subjects.iterator();
         while (iterator.hasNext()) {
             Subject subject = (Subject) iterator.next();
@@ -115,7 +115,7 @@ public final class Request implements Serializable {
             }
         }
         stringBuilder.append("], ");
-        stringBuilder.append("resources: [");
+        stringBuilder.append("resources:[");
         Iterator<Resource> it= resources.iterator();
         while (it.hasNext()) {
             Resource resource = (Resource) it.next();
