@@ -18,6 +18,7 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.glite.authz.common.model.util.LazySet;
@@ -163,7 +164,7 @@ public final class Attribute implements Serializable {
      * Constructor.
      * 
      * @param id The attribute identifier
-     * @param dataType The attribute data type
+     * @param dataType The attribute DataType
      * @param issuer The attribute issuer
      */
     public Attribute(String id, String dataType, String issuer) {
@@ -174,13 +175,22 @@ public final class Attribute implements Serializable {
     }
 
     /**
-     * Constructor
+     * Constructor. No issuer is set.
      * 
      * @param id The attribute identifier
      * @param dataType The attribute data type
      */
     public Attribute(String id, String dataType) {
         this(id, dataType, null);
+    }
+
+    /**
+     * Constructor. The default DataType is {@value #DT_STRING}.
+     * 
+     * @param id The attribute identifier
+     */
+    public Attribute(String id) {
+        this(id, DT_STRING);
     }
 
     /**
@@ -249,20 +259,20 @@ public final class Attribute implements Serializable {
     /** {@inheritDoc}. */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
         stringBuilder.append("Attribute {");
         stringBuilder.append("id: ").append(id).append(", ");
         stringBuilder.append("dataType: ").append(dataType).append(", ");
         stringBuilder.append("issuer: ").append(issuer).append(", ");
-
         stringBuilder.append("values: [");
-        for (Object value : values) {
-            stringBuilder.append(value.toString()).append(", ");
+        Iterator<Object> iterator= values.iterator();
+        while (iterator.hasNext()) {
+            Object value = (Object) iterator.next();
+            stringBuilder.append(value.toString());
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-        stringBuilder.append("]");
-
-        stringBuilder.append("}");
-
+        stringBuilder.append("]}");
         return stringBuilder.toString();
     }
 

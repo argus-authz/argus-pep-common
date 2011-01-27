@@ -18,6 +18,7 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
 import org.glite.authz.common.model.util.LazyList;
@@ -157,21 +158,20 @@ public final class Result implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
         stringBuilder.append("Result {");
-
-        stringBuilder.append("decision: ").append(decision).append(", ");
+        stringBuilder.append("decision: ").append(decisionToString(decision)).append(", ");
         stringBuilder.append("resourceId: ").append(resourceId).append(", ");
         stringBuilder.append("status: ").append(status).append(", ");
-
         stringBuilder.append("obligations: [");
-        for (Obligation obligation : obligations) {
-            stringBuilder.append(obligation).append(", ");
+        Iterator<Obligation> iterator= obligations.iterator();
+        while (iterator.hasNext()) {
+            Obligation obligation = (Obligation) iterator.next();
+            stringBuilder.append(obligation);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-        stringBuilder.append("]");
-
-        stringBuilder.append("}");
-
+        stringBuilder.append("]}");
         return stringBuilder.toString();
     }
 

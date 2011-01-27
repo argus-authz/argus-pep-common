@@ -97,13 +97,11 @@ public final class AttributeAssignment implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
         stringBuilder.append("AttributeAssignment {");
         stringBuilder.append("attributeId: ").append(attributeId).append(", ");
         stringBuilder.append("dataType: ").append(dataType).append(", ");
-        stringBuilder.append("value: ").append(value).append(", ");
+        stringBuilder.append("value: ").append(value);
         stringBuilder.append("}");
-
         return stringBuilder.toString();
     }
 

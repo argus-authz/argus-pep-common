@@ -18,6 +18,7 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.glite.authz.common.model.util.LazySet;
@@ -48,17 +49,17 @@ public final class Environment implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
         stringBuilder.append("Environment {");
-
         stringBuilder.append("values: [");
-        for (Attribute attribute : attributes) {
-            stringBuilder.append(attribute).append(", ");
+        Iterator<Attribute> iterator= attributes.iterator();
+        while (iterator.hasNext()) {
+            Attribute attribute = (Attribute) iterator.next();
+            stringBuilder.append(attribute);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-        stringBuilder.append("]");
-
-        stringBuilder.append("}");
-
+        stringBuilder.append("]}");
         return stringBuilder.toString();
     }
 

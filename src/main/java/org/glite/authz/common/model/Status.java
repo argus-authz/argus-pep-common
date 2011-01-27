@@ -76,12 +76,10 @@ public final class Status implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
         stringBuilder.append("Status {");
         stringBuilder.append("statusCode: ").append(statusCode).append(", ");
         stringBuilder.append("message: ").append(message);
         stringBuilder.append("}");
-
         return stringBuilder.toString();
     }
 

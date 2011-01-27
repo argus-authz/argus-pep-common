@@ -18,6 +18,7 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.glite.authz.common.model.util.LazySet;
@@ -104,31 +105,29 @@ public final class Request implements Serializable {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Request {");
-
-        if (action != null) {
-            stringBuilder.append("action: ").append(action).append(", ");
-        }
-
-        if (environment != null) {
-            stringBuilder.append("environment: ").append(environment).append(", ");
-        }
-
-        stringBuilder.append("resources: [");
-        for (Resource resource : resources) {
-            stringBuilder.append(resource).append(", ");
-        }
-        stringBuilder.append("]");
-
-        stringBuilder.append(", ");
-
         stringBuilder.append("subjects: [");
-        for (Subject subject : subjects) {
-            stringBuilder.append(subject).append(", ");
+        Iterator<Subject> iterator= subjects.iterator();
+        while (iterator.hasNext()) {
+            Subject subject = (Subject) iterator.next();
+            stringBuilder.append(subject);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-        stringBuilder.append("]");
-
+        stringBuilder.append("], ");
+        stringBuilder.append("resources: [");
+        Iterator<Resource> it= resources.iterator();
+        while (it.hasNext()) {
+            Resource resource = (Resource) it.next();
+            stringBuilder.append(resource);
+            if (it.hasNext()) {
+                stringBuilder.append(", ");
+            }
+        }
+        stringBuilder.append("], ");
+        stringBuilder.append("action: ").append(action).append(", ");
+        stringBuilder.append("environment: ").append(environment);
         stringBuilder.append("}");
-
         return stringBuilder.toString();
     }
 

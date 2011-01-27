@@ -18,6 +18,7 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
 import org.glite.authz.common.model.util.LazyList;
@@ -95,19 +96,20 @@ public final class Obligation implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
         stringBuilder.append("Obligation {");
         stringBuilder.append("id: ").append(id).append(", ");
         stringBuilder.append("fulfillOn: ").append(fulfillOn).append(", ");
 
         stringBuilder.append("attributeAssingments: [");
-        for (AttributeAssignment assignment : attributeAssignments) {
-            stringBuilder.append(assignment).append(", ");
+        Iterator<AttributeAssignment> iterator= attributeAssignments.iterator();
+        while (iterator.hasNext()) {
+            AttributeAssignment assignment = (AttributeAssignment) iterator.next();
+            stringBuilder.append(assignment);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-        stringBuilder.append("]");
-
-        stringBuilder.append("}");
-
+        stringBuilder.append("]}");
         return stringBuilder.toString();
     }
 

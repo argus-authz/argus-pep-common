@@ -18,6 +18,7 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
 import org.glite.authz.common.model.util.LazyList;
@@ -69,16 +70,17 @@ public final class Response implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
         stringBuilder.append("Response {");
-
         stringBuilder.append("results: [");
-        for (Result result : results) {
-            stringBuilder.append(result).append(", ");
+        Iterator<Result> iterator= results.iterator();
+        while (iterator.hasNext()) {
+            Result result = (Result) iterator.next();
+            stringBuilder.append(result);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-
-        stringBuilder.append("}");
-
+        stringBuilder.append("]}");
         return stringBuilder.toString();
     }
 
