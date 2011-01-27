@@ -267,7 +267,7 @@ public final class Attribute implements Serializable {
         Iterator<Object> iterator= values.iterator();
         while (iterator.hasNext()) {
             Object value = (Object) iterator.next();
-            stringBuilder.append(value.toString());
+            stringBuilder.append(value);
             if (iterator.hasNext()) {
                 stringBuilder.append(", ");
             }
