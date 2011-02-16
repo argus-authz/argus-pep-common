@@ -21,6 +21,13 @@
     <url>http://glite.web.cern.ch/glite/</url>
     <inceptionYear>2008</inceptionYear>
 
+    <repositories>
+        <repository>
+            <id>switch</id>
+            <name>SWITCH Releases</name>
+            <url>http://www.switch.ch/grid/authz/docs/maven2/release</url>
+        </repository>
+    </repositories>
 
     <dependencies>
        <dependency>
