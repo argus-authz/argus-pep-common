@@ -27,7 +27,7 @@ import org.glite.authz.common.model.Result;
 public interface ObligationHandler {
 
     /**
-     * Gets a unique identifier for this obligation handle.
+     * Gets a unique identifier (name) for this obligation handle.
      * 
      * @return unique identifier for this obligation handle
      */
