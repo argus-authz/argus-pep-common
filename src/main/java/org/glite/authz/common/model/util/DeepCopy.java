@@ -21,15 +21,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * Utility for making deep copies (vs. clone()'s shallow copies) of objects.
- * Objects are first serialized and then deserialized. Error checking is fairly
- * minimal in this implementation. If an object is encountered that cannot be
- * serialized (or that references an object that cannot be serialized) an error
- * is printed to System.err and null is returned. Depending on your specific
- * application, it might make more sense to have copy(...) re-throw the
- * exception.
+ * Objects are first serialized and then deserialized. Copied objects must
+ * implement the {@link Serializable} interface.
+ * <p>
+ * Error checking is fairly minimal in this implementation. If an object is
+ * encountered that cannot be serialized (or that references an object that
+ * cannot be serialized) an error is printed to System.err and null is returned.
+ * <p>
+ * <b>NOTICE:</b> The performance of this deep copy utility is not optimal,
+ * serializing and deserializing objects is a very time consuming operation.
  */
 public class DeepCopy {
 
@@ -54,9 +58,9 @@ public class DeepCopy {
             // Make an input stream from the byte array and read
             // a copy of the object back in.
             ByteArrayInputStream bais= new ByteArrayInputStream(baos.toByteArray());
-            ObjectInputStream in= new ObjectInputStream(bais);
-            copy= in.readObject();
-
+            ObjectInputStream ois= new ObjectInputStream(bais);
+            copy= ois.readObject();
+            ois.close();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
