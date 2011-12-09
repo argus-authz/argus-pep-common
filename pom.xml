@@ -118,7 +118,7 @@
     
     <profiles>
         <profile>
-            <id>etics</id>
+            <id>EMI</id>
             <build>
                 <finalName>pep-common</finalName>
             </build>
