@@ -1,16 +1,20 @@
+argus-pep-common 2.2.0
+----------------------
+- uses org.glite.authz:argus-parent:1.5 parent module.
+- new util.DeepCopy utility class added.
+
 argus-pep-common 2.1.0
 ----------------------
-new Attribute constructors added.
-refactoring: hessian-java 3.2.1 included in project (not a dependency anymore)
-
+- new Attribute constructors added.
+- refactoring: hessian-java 3.2.1 included in project (not a dependency anymore)
 
 argus-pep-common 2.0.0
 ----------------------
-refactoring: contains only the XACML object model, and common PEP server and client functionalities.
-refactoring: all PEP server specifics moved to PEP server project.
-refactoring: base PEPException added and used.
-refactoring: annotations removed.
-refactoring: use interface (Set, List, ...) in variable declaration.
-refactoring: use standalone common.model.util LazyList, LazySet and Strings utilities.
-bug fix: setDecision() setFulfillOn() setter corrected.
+- refactoring: contains only the XACML object model, and common PEP server and client functionalities.
+- refactoring: all PEP server specifics moved to PEP server project.
+- refactoring: base PEPException added and used.
+- refactoring: annotations removed.
+- refactoring: use interface (Set, List, ...) in variable declaration.
+- refactoring: use standalone common.model.util LazyList, LazySet and Strings utilities.
+- bug fix: setDecision() setFulfillOn() setter corrected.
 
