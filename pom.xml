@@ -68,6 +68,13 @@
                 </executions>
             </plugin>
         </plugins>
+        <extensions>
+          <extension>
+            <!-- support for scpexe: -->
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-ssh-external</artifactId>
+          </extension>
+        </extensions>
     </build>
 
     <reporting>
