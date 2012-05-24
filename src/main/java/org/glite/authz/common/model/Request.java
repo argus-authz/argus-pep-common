@@ -1,12 +1,12 @@
 /*
- * Copyright 2008 Members of the EGEE Collaboration.
- * See http://www.eu-egee.org/partners for details on the copyright holders. 
+ * Copyright (c) Members of the EGEE Collaboration. 2006-2010.
+ * See http://www.eu-egee.org/partners/ for details on the copyright holders.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,24 +18,22 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Set;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazySet;
+import org.glite.authz.common.model.util.LazySet;
 
 /** An authorization request. */
-@NotThreadSafe
 public final class Request implements Serializable {
 
     /** Serial version UID. */
     private static final long serialVersionUID = 7263488106115027959L;
 
     /** Subjects about which the request is being made. */
-    private LazySet<Subject> subjects;
+    private Set<Subject> subjects;
 
     /** Resources about which the request is being made. */
-    private LazySet<Resource> resources;
+    private Set<Resource> resources;
 
     /** The action to be authorized. */
     private Action action;
@@ -106,32 +104,30 @@ public final class Request implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Request {");
-
-        if (action != null) {
-            stringBuilder.append("action: ").append(action).append(", ");
+        stringBuilder.append("Request{ ");
+        stringBuilder.append("subjects:[");
+        Iterator<Subject> iterator= subjects.iterator();
+        while (iterator.hasNext()) {
+            Subject subject = (Subject) iterator.next();
+            stringBuilder.append(subject);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-
-        if (environment != null) {
-            stringBuilder.append("environment: ").append(environment).append(", ");
+        stringBuilder.append("], ");
+        stringBuilder.append("resources:[");
+        Iterator<Resource> it= resources.iterator();
+        while (it.hasNext()) {
+            Resource resource = (Resource) it.next();
+            stringBuilder.append(resource);
+            if (it.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-
-        stringBuilder.append("resources: [");
-        for (Resource resource : resources) {
-            stringBuilder.append(resource).append(", ");
-        }
-        stringBuilder.append("]");
-
-        stringBuilder.append(", ");
-
-        stringBuilder.append("subjects: [");
-        for (Subject subject : subjects) {
-            stringBuilder.append(subject).append(", ");
-        }
-        stringBuilder.append("]");
-
+        stringBuilder.append("], ");
+        stringBuilder.append("action: ").append(action).append(", ");
+        stringBuilder.append("environment: ").append(environment);
         stringBuilder.append("}");
-
         return stringBuilder.toString();
     }
 

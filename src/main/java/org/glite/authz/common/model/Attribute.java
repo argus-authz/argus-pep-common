@@ -1,12 +1,12 @@
 /*
- * Copyright 2008 Members of the EGEE Collaboration.
- * See http://www.eu-egee.org/partners for details on the copyright holders. 
+ * Copyright (c) Members of the EGEE Collaboration. 2006-2010.
+ * See http://www.eu-egee.org/partners/ for details on the copyright holders.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,19 +18,17 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Set;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazySet;
-import org.glite.authz.common.util.Strings;
+import org.glite.authz.common.model.util.LazySet;
+import org.glite.authz.common.model.util.Strings;
 
 /**
  * An attribute that identifies either a {@link Subject}, {@link Resource}, {@link Environment} or {@link Action}.
  * 
  * If no data type is given for an attribute the data type defaults to {@value #DT_STRING}.
  */
-@NotThreadSafe
 public final class Attribute implements Serializable {
 
     /** The string data type URI, {@value} . */
@@ -154,12 +152,45 @@ public final class Attribute implements Serializable {
     private String issuer;
 
     /** Values of the attribute. */
-    private LazySet<Object> values;
+    private Set<Object> values;
 
-    /** Constructor. */
+    /** Constructor. Default DataType is {@value #DT_STRING} */
     public Attribute() {
         dataType = DT_STRING;
         values = new LazySet<Object>();
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param id The attribute identifier
+     * @param dataType The attribute DataType
+     * @param issuer The attribute issuer
+     */
+    public Attribute(String id, String dataType, String issuer) {
+        this();
+        this.id = Strings.safeTrimOrNullString(id);
+        this.dataType = Strings.safeTrimOrNullString(dataType);
+        this.issuer = Strings.safeTrimOrNullString(issuer);
+    }
+
+    /**
+     * Constructor. No issuer is set.
+     * 
+     * @param id The attribute identifier
+     * @param dataType The attribute data type
+     */
+    public Attribute(String id, String dataType) {
+        this(id, dataType, null);
+    }
+
+    /**
+     * Constructor. The default DataType is {@value #DT_STRING}.
+     * 
+     * @param id The attribute identifier
+     */
+    public Attribute(String id) {
+        this(id, DT_STRING);
     }
 
     /**
@@ -228,20 +259,20 @@ public final class Attribute implements Serializable {
     /** {@inheritDoc}. */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("Attribute {");
+        stringBuilder.append("Attribute{ ");
         stringBuilder.append("id: ").append(id).append(", ");
         stringBuilder.append("dataType: ").append(dataType).append(", ");
         stringBuilder.append("issuer: ").append(issuer).append(", ");
-
-        stringBuilder.append("values: [");
-        for (Object value : values) {
-            stringBuilder.append(value.toString()).append(", ");
+        stringBuilder.append("values:[");
+        Iterator<Object> iterator= values.iterator();
+        while (iterator.hasNext()) {
+            Object value = (Object) iterator.next();
+            stringBuilder.append(value);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-        stringBuilder.append("]");
-
-        stringBuilder.append("}");
-
+        stringBuilder.append("]}");
         return stringBuilder.toString();
     }
 

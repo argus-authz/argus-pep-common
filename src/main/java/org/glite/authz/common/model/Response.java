@@ -1,12 +1,12 @@
 /*
- * Copyright 2008 Members of the EGEE Collaboration.
- * See http://www.eu-egee.org/partners for details on the copyright holders. 
+ * Copyright (c) Members of the EGEE Collaboration. 2006-2010.
+ * See http://www.eu-egee.org/partners/ for details on the copyright holders.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,14 +18,12 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazyList;
+import org.glite.authz.common.model.util.LazyList;
 
 /** Response for an authorization {@link Request}. */
-@NotThreadSafe
 public final class Response implements Serializable {
 
     /** Serial version UID. */
@@ -35,7 +33,7 @@ public final class Response implements Serializable {
     private Request request;
 
     /** The results from an authorization request. */
-    private LazyList<Result> results;
+    private List<Result> results;
 
     /** Constructor. */
     public Response() {
@@ -72,16 +70,21 @@ public final class Response implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("Response {");
-
-        stringBuilder.append("results: [");
-        for (Result result : results) {
-            stringBuilder.append(result).append(", ");
+        stringBuilder.append("Response{ ");
+        stringBuilder.append("results:[");
+        Iterator<Result> iterator= results.iterator();
+        while (iterator.hasNext()) {
+            Result result = (Result) iterator.next();
+            stringBuilder.append(result);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-
+        stringBuilder.append("]");
+        if (request!=null) {
+            stringBuilder.append(", request: ").append(request);
+        }
         stringBuilder.append("}");
-
         return stringBuilder.toString();
     }
 

@@ -1,12 +1,12 @@
 /*
- * Copyright 2008 Members of the EGEE Collaboration.
- * See http://www.eu-egee.org/partners for details on the copyright holders. 
+ * Copyright (c) Members of the EGEE Collaboration. 2006-2010.
+ * See http://www.eu-egee.org/partners/ for details on the copyright holders.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,15 +18,13 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Set;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazySet;
-import org.glite.authz.common.util.Strings;
+import org.glite.authz.common.model.util.LazySet;
+import org.glite.authz.common.model.util.Strings;
 
 /** An attribute-based description of the resource within which an {@link Action} to be authorized is made. */
-@NotThreadSafe
 public final class Resource implements Serializable {
 
     /** Serial version UID. */
@@ -36,7 +34,7 @@ public final class Resource implements Serializable {
     private String resourceContent;
 
     /** Attributes that describe the resource. */
-    private LazySet<Attribute> attributes;
+    private Set<Attribute> attributes;
 
     /** Constructor. */
     public Resource() {
@@ -73,18 +71,19 @@ public final class Resource implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Resource{ ");
+        stringBuilder.append("content: ").append(resourceContent).append(", ");
 
-        stringBuilder.append("Resource {");
-
-        stringBuilder.append("resourceContent: ").append(resourceContent).append(", ");
-
-        stringBuilder.append("attributes: [");
-        for (Attribute attribute : attributes) {
-            stringBuilder.append(attribute).append(", ");
+        stringBuilder.append("attributes:[");
+        Iterator<Attribute> iterator= attributes.iterator();
+        while (iterator.hasNext()) {
+            Attribute attribute = (Attribute) iterator.next();
+            stringBuilder.append(attribute);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-        stringBuilder.append("]");
-        stringBuilder.append("}");
-
+        stringBuilder.append("]}");
         return stringBuilder.toString();
     }
 

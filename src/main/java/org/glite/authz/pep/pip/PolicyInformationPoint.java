@@ -1,12 +1,12 @@
 /*
- * Copyright 2009 Members of the EGEE Collaboration.
- * See http://www.eu-egee.org/partners for details on the copyright holders. 
+ * Copyright (c) Members of the EGEE Collaboration. 2006-2010.
+ * See http://www.eu-egee.org/partners/ for details on the copyright holders.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,9 +17,6 @@
 
 package org.glite.authz.pep.pip;
 
-import net.jcip.annotations.ThreadSafe;
-
-import org.glite.authz.common.AuthorizationServiceException;
 import org.glite.authz.common.model.Request;
 
 /**
@@ -40,7 +37,6 @@ import org.glite.authz.common.model.Request;
  * resource information</li>
  * </ul>
  */
-@ThreadSafe
 public interface PolicyInformationPoint {
 
     /**
@@ -65,14 +61,14 @@ public interface PolicyInformationPoint {
     /**
      * Stars the PIP. This is called so that the PIP may initialize itself before its first invocation.
      * 
-     * @throws AuthorizationServiceException thrown if there is a problem starting the PIP
+     * @throws PIPException thrown if there is a problem starting the PIP
      */
-    public void start() throws AuthorizationServiceException;
+    public void start() throws PIPException;
 
     /**
      * Stops the PIP. This is called so that the PIP may clean up any resource before the service shuts down.
      * 
-     * @throws AuthorizationServiceException throw if there is a problem stop the PIP
+     * @throws PIPException throw if there is a problem stop the PIP
      */
-    public void stop() throws AuthorizationServiceException;
+    public void stop() throws PIPException;
 }

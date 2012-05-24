@@ -1,12 +1,12 @@
 /*
- * Copyright 2008 Members of the EGEE Collaboration.
- * See http://www.eu-egee.org/partners for details on the copyright holders. 
+ * Copyright (c) Members of the EGEE Collaboration. 2006-2010.
+ * See http://www.eu-egee.org/partners/ for details on the copyright holders.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,15 +18,13 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazyList;
-import org.glite.authz.common.util.Strings;
+import org.glite.authz.common.model.util.LazyList;
+import org.glite.authz.common.model.util.Strings;
 
 /** Result of an authorization request. */
-@NotThreadSafe
 public final class Result implements Serializable {
 
     /** Decision Deny value, {@value} . */
@@ -54,7 +52,7 @@ public final class Result implements Serializable {
     private Status status;
 
     /** Obligations associated with the result. */
-    private LazyList<Obligation> obligations;
+    private List<Obligation> obligations;
 
     /** Constructor. */
     public Result() {
@@ -76,7 +74,16 @@ public final class Result implements Serializable {
      * @return numeric decision code's equivalent XACML string
      */
     public String getDecisionString() {
-        switch (decision) {
+        return decisionToString(decision);
+    }
+
+    /**
+     * Helper method for converting the numeric decision code to its equivalent XACML string.
+     * 
+     * @return numeric decision code's equivalent XACML string
+     */
+    static public String decisionToString(int decisionValue) {
+        switch (decisionValue) {
             case 0:
                 return "Deny";
             case 1:
@@ -87,17 +94,17 @@ public final class Result implements Serializable {
                 return "NotApplicable";
             default:
                 return null;
-        }
+        }        
     }
-
+    
     /**
      * Sets the decision of the authorization request.
      * 
      * @param newDecision decision of the authorization request
      */
     public void setDecision(int newDecision) {
-        if (decision != DECISION_DENY && decision != DECISION_PERMIT && decision != DECISION_INDETERMINATE
-                && decision != DECISION_NOT_APPLICABLE) {
+        if (newDecision != DECISION_DENY && newDecision != DECISION_PERMIT && newDecision != DECISION_INDETERMINATE
+                && newDecision != DECISION_NOT_APPLICABLE) {
             throw new IllegalArgumentException("Invalid decision value");
         }
         decision = newDecision;
@@ -151,21 +158,20 @@ public final class Result implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("Result {");
-
-        stringBuilder.append("decision: ").append(decision).append(", ");
+        stringBuilder.append("Result{ ");
+        stringBuilder.append("decision(").append(decision).append("): ").append(decisionToString(decision)).append(", ");
         stringBuilder.append("resourceId: ").append(resourceId).append(", ");
         stringBuilder.append("status: ").append(status).append(", ");
-
-        stringBuilder.append("obligations: [");
-        for (Obligation obligation : obligations) {
-            stringBuilder.append(obligation).append(", ");
+        stringBuilder.append("obligations:[");
+        Iterator<Obligation> iterator= obligations.iterator();
+        while (iterator.hasNext()) {
+            Obligation obligation = (Obligation) iterator.next();
+            stringBuilder.append(obligation);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-        stringBuilder.append("]");
-
-        stringBuilder.append("}");
-
+        stringBuilder.append("]}");
         return stringBuilder.toString();
     }
 

@@ -1,12 +1,12 @@
 /*
- * Copyright 2008 Members of the EGEE Collaboration.
- * See http://www.eu-egee.org/partners for details on the copyright holders. 
+ * Copyright (c) Members of the EGEE Collaboration. 2006-2010.
+ * See http://www.eu-egee.org/partners/ for details on the copyright holders.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,21 +18,19 @@
 package org.glite.authz.common.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Set;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.LazySet;
+import org.glite.authz.common.model.util.LazySet;
 
 /** An attribute-based description of an action to be authorized. */
-@NotThreadSafe
 public final class Action implements Serializable {
 
     /** Serial version UID. */
     private static final long serialVersionUID = -2085506180809169465L;
 
     /** Attributes that identify the action. */
-    private LazySet<Attribute> attributes;
+    private Set<Attribute> attributes;
 
     /** Constructor. */
     public Action() {
@@ -51,17 +49,17 @@ public final class Action implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("Action {");
-
-        stringBuilder.append("attributes: [");
-        for (Attribute attribute : attributes) {
-            stringBuilder.append(attribute).append(", ");
+        stringBuilder.append("Action{ ");
+        stringBuilder.append("attributes:[");
+        Iterator<Attribute> iterator= attributes.iterator();
+        while (iterator.hasNext()) {
+            Attribute attribute = (Attribute) iterator.next();
+            stringBuilder.append(attribute);
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            }
         }
-        stringBuilder.append("]");
-
-        stringBuilder.append("}");
-
+        stringBuilder.append("]}");
         return stringBuilder.toString();
     }
 

@@ -1,184 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.glite.authz</groupId>
+        <artifactId>argus-parent</artifactId>
+        <version>1.5</version>
+        <relativePath>../emi.argus.parent</relativePath>
+    </parent>
+
+    <name>Argus PEP client and server common library</name>
     <groupId>org.glite.authz</groupId>
     <artifactId>pep-common</artifactId>
-    <name>gLite Authorization Service: PEP Java Common Libray</name>
-    <version>1.0.0</version>
+    <version>2.2.1</version>
+    <packaging>jar</packaging>
 
-    <description>XACML based authorization service developed within the gLite project.
-    </description>
+    <description>XACML based authorization service developed within the gLite project.</description>
     <url>http://glite.web.cern.ch/glite/</url>
     <inceptionYear>2008</inceptionYear>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <slf4j.groupId>org.slf4j</slf4j.groupId>
-        <slf4j.version>1.5.8</slf4j.version>
-        <logback.groupId>ch.qos.logback</logback.groupId>
-        <logback.version>0.9.18</logback.version>
-    </properties>
-
-    <repositories>
-        <repository>
-            <id>internet2</id>
-            <name>Internet2 Releases</name>
-            <url>http://shibboleth.internet2.edu/downloads/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>switch</id>
-            <name>SWITCH Releases</name>
-            <url>http://www.switch.ch/grid/authz/docs/maven2/release</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <dependencies>
-        <!-- Compile Dependencies-->
-        <dependency>
-            <groupId>org.glite.authz</groupId>
-            <artifactId>pdp-pep-common</artifactId>
-            <version>1.0.4</version>
-        </dependency>        
-        
-        <!-- Provided Dependencies -->
-        <dependency>
-            <groupId>net.jcip</groupId>
-            <artifactId>jcip-annotations</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        
-        <!-- Runtime Dependencies -->
-        <dependency>
-            <groupId>${slf4j.groupId}</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${slf4j.groupId}</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${slf4j.groupId}</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${slf4j.groupId}</groupId>
-            <artifactId>slf4j-jcl</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${slf4j.groupId}</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${slf4j.groupId}</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${slf4j.groupId}</groupId>
-            <artifactId>slf4j-nop</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${slf4j.groupId}</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-                <dependency>
-            <groupId>${logback.groupId}</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>${logback.groupId}</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-
-        <!-- Test Dependencies -->
-        <dependency>
+       <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
             <scope>test</scope>
-        </dependency>
-    </dependencies>
+        </dependency>        
+     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                    <debug>true</debug>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <artifactId>maven-source-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
                         <goals>
-                            <goal>attached</goal>
+                            <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/bin.xml</descriptor>
-                    </descriptors>
-                    <tarLongFileMode>gnu</tarLongFileMode>
-                </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
                 <configuration>
-                    <archive>
-                        <index>true</index>
-                        <manifestSections>
-                            <manifestSection>
-                                <name>org/glite/authz/pep/client</name>
-                                <manifestEntries>
-                                    <Implementation-Title>${pom.artifactId}
-                                    </Implementation-Title>
-                                    <Implementation-Version>${pom.version}
-                                    </Implementation-Version>
-                                    <Implementation-Vendor>EGEE Collaboration
-                                    </Implementation-Vendor>
-                                </manifestEntries>
-                            </manifestSection>
-                        </manifestSections>
-                    </archive>
+                    <header>project/LICENSE.template</header>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                        <ini>SCRIPT_STYLE</ini>
+                    </mapping>
+                    <includes>
+                        <include>src/**</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/com/caucho/**</exclude>
+                        <exclude>**/resources/**</exclude>
+                        <exclude>**/credentials/**</exclude>
+                    </excludes>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
+        <extensions>
+          <extension>
+            <!-- support for scpexe: -->
+            <groupId>org.apache.maven.wagon</groupId>
+            <artifactId>wagon-ssh-external</artifactId>
+          </extension>
+        </extensions>
     </build>
 
     <reporting>
@@ -229,28 +125,28 @@
     
     <profiles>
         <profile>
-            <id>etics</id>
+            <id>EMI</id>
             <build>
                 <finalName>pep-common</finalName>
             </build>
         </profile>
     </profiles>
     
-    <distributionManagement>
-        <repository>
-            <id>release-repo</id>
-            <url>${dist.release.url}</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshot-repo</id>
-            <url>${dist.snapshot.url}</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <developers>
         <developer>
             <id>lajoie</id>
             <name>Chad La Joie</name>
+            <organization>SWITCH</organization>
+            <organizationUrl>http://www.switch.ch/</organizationUrl>
+            <roles>
+                <role>developer</role>
+                <role>documentation</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>vtschopp</id>
+            <name>Valery Tschopp</name>
             <organization>SWITCH</organization>
             <organizationUrl>http://www.switch.ch/</organizationUrl>
             <roles>
@@ -266,12 +162,12 @@
             <name>Apache 2</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt
             </url>
-            <distribution>repo</distribution>
         </license>
     </licenses>
 
     <organization>
-        <name>EGEE Collaboration</name>
-        <url>http://www.eu-egee.org/</url>
+        <name>EMI - European Middleware Initiative</name>
+        <url>http://www.eu-emi.eu/</url>
     </organization>
+
 </project>

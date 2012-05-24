@@ -1,12 +1,12 @@
 /*
- * Copyright 2008 Members of the EGEE Collaboration.
- * See http://www.eu-egee.org/partners for details on the copyright holders. 
+ * Copyright (c) Members of the EGEE Collaboration. 2006-2010.
+ * See http://www.eu-egee.org/partners/ for details on the copyright holders.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,12 +19,9 @@ package org.glite.authz.common.model;
 
 import java.io.Serializable;
 
-import net.jcip.annotations.NotThreadSafe;
-
-import org.glite.authz.common.util.Strings;
+import org.glite.authz.common.model.util.Strings;
 
 /** The code for a {@link Status}. */
-@NotThreadSafe
 public final class StatusCode implements Serializable {
 
     /** Serial version UID. */
@@ -79,12 +76,10 @@ public final class StatusCode implements Serializable {
     /** {@inheritDoc} */
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("StatusCode {");
+        stringBuilder.append("StatusCode{ ");
         stringBuilder.append("code: ").append(code).append(", ");
         stringBuilder.append("subCode: ").append(subCode);
         stringBuilder.append("}");
-
         return stringBuilder.toString();
     }
 
