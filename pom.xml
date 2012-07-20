@@ -17,8 +17,8 @@
     <version>2.2.1</version>
     <packaging>jar</packaging>
 
-    <description>XACML based authorization service developed within the gLite project.</description>
-    <url>http://glite.web.cern.ch/glite/</url>
+    <description>XACML based authorization service</description>
+    <url>https://twiki.cern.ch/twiki/bin/view/EGEE/AuthorizationFramework</url>
     <inceptionYear>2008</inceptionYear>
 
     <dependencies>
@@ -170,4 +170,8 @@
         <url>http://www.eu-emi.eu/</url>
     </organization>
 
+    <scm>
+    	<url>https://github.com/argus-authz/argus-pep-common</url>
+    	<connection>scm:git:https://github.com/argus-authz/argus-pep-common.git</connection>
+    </scm>
 </project>
