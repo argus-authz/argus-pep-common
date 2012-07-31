@@ -52,7 +52,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %dir %{_datadir}/java
-%{_datadir}/java/%{name}-%{version}.jar
+%{_datadir}/java/%{name}.jar
 %{_datadir}/java/%{name}-%{version}.jar
 %dir %{_defaultdocdir}/%{name}-%{version}
 %{_defaultdocdir}/%{name}-%{version}/RELEASE-NOTES
