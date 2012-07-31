@@ -67,6 +67,21 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <tarLongFileMode>gnu</tarLongFileMode>
+                </configuration>
+            </plugin>
         </plugins>
         <extensions>
           <extension>
@@ -126,16 +141,101 @@
     <profiles>
         <profile>
             <id>EMI</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>            
             <build>
-                <finalName>pep-common</finalName>
+                <finalName>argus-pep-common</finalName>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <!-- overwrite default descriptor to use -->
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/fakeroot.xml</descriptor>
+                                <descriptor>src/main/assembly/src-tarball.xml</descriptor>
+                            </descriptors>
+                            <attach>false</attach>
+                            <ignoreDirFormatExtensions>false</ignoreDirFormatExtensions>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>rename-jar-file</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${project.build.directory}/${project.build.finalName}-fakeroot.dir/usr/share/java</workingDirectory>
+                                    <executable>/bin/mv</executable>
+                                    <arguments>
+                                        <argument>-v</argument>
+                                        <argument>${project.artifactId}-${project.version}.jar</argument>
+                                        <argument>${project.build.finalName}-${project.version}.jar</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>create-emi-symlinks</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${project.build.directory}/${project.build.finalName}-fakeroot.dir/usr/share/java</workingDirectory>
+                                    <executable>/bin/ln</executable>
+                                    <arguments>
+                                        <argument>-sfv</argument>
+                                        <argument>${project.build.finalName}-${project.version}.jar</argument>
+                                        <argument>${project.build.finalName}.jar</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>create-emi-tarball</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${project.build.directory}/${project.build.finalName}-fakeroot.dir</workingDirectory>
+                                    <executable>/bin/sh</executable>
+                                    <arguments>
+                                        <argument>${basedir}/src/main/build/emi-binary-tarball.sh</argument>
+                                        <argument>${project.build.finalName}-${project.version}</argument>
+                                   </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>delete-emi-symlinks</id>
+                                <phase>pre-clean</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <workingDirectory>${project.build.directory}/${project.build.finalName}-fakeroot.dir</workingDirectory>
+                                    <executable>/bin/rm</executable>
+                                    <arguments>
+                                        <argument>-f</argument>
+                                        <argument>usr/share/java/${project.build.finalName}.jar</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>                
             </build>
         </profile>
     </profiles>
     
     <developers>
         <developer>
-            <id>lajoie</id>
-            <name>Chad La Joie</name>
+            <id>vtschopp</id>
+            <name>Valery Tschopp</name>
             <organization>SWITCH</organization>
             <organizationUrl>http://www.switch.ch/</organizationUrl>
             <roles>
@@ -145,8 +245,8 @@
             <timezone>+1</timezone>
         </developer>
         <developer>
-            <id>vtschopp</id>
-            <name>Valery Tschopp</name>
+            <id>lajoie</id>
+            <name>Chad La Joie</name>
             <organization>SWITCH</organization>
             <organizationUrl>http://www.switch.ch/</organizationUrl>
             <roles>
@@ -171,7 +271,7 @@
     </organization>
 
     <scm>
-    	<url>https://github.com/argus-authz/argus-pep-common</url>
-    	<connection>scm:git:https://github.com/argus-authz/argus-pep-common.git</connection>
+        <url>https://github.com/argus-authz/argus-pep-common</url>
+        <connection>scm:git:https://github.com/argus-authz/argus-pep-common.git</connection>
     </scm>
 </project>
