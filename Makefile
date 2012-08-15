@@ -26,10 +26,11 @@ package: spec
 dist: package
 	@echo "Repackaging the maven source tarball..."
 	rm -fr $(name)
-	tar -vxzf target/$(name)-$(version).src.tar.gz
-	mv -v $(name) $(name)-$(version)
-	test ! -f $(name)-$(version).tar.gz || rm -v $(name)-$(version).tar.gz
-	tar -vczf $(name)-$(version).tar.gz $(name)-$(version)
+	tar -xzf target/$(name)-$(version).src.tar.gz
+	mv $(name) $(name)-$(version)
+	test ! -f $(name)-$(version).tar.gz || rm $(name)-$(version).tar.gz
+	tar -czf $(name)-$(version).tar.gz $(name)-$(version)
+	rm -fr $(name)-$(version)
 
 
 rpm: dist
@@ -61,9 +62,3 @@ install:
 	test -f target/$(name)-$(version).tar.gz
 	mkdir -p $(DESTDIR)$(prefix)
 	tar -C $(DESTDIR)$(prefix) -xvzf target/$(name)-$(version).tar.gz
-
-stage:
-	echo "Staging tarball in $(stage_dir)"
-	mkdir -p $(stage_dir)
-	tar -C $(stage_dir) -xvzf target/$(name)-$(version).tar.gz
-
