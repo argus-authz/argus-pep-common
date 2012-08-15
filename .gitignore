@@ -1,6 +1,7 @@
 /.settings
 /target
 /rpmbuild
+/debbuild
 /RPMS
 /tgz
 /stage

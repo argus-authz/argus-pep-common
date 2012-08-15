@@ -4,6 +4,7 @@ version=$(shell grep "Version:" $(spec) | sed -e "s/Version://g" -e "s/[ \t]*//g
 release=1
 
 rpmbuild_dir=$(CURDIR)/rpmbuild
+debbuild_dir = $(CURDIR)/debbuild
 maven_nexus_settings_file=project/emi-maven-settings.xml
 maven_settings_file=project/maven-settings.xml
 stage_dir=$(CURDIR)/stage
@@ -31,11 +32,20 @@ package-etics: spec-etics
 
 rpm: package
 	@echo "Building RPM and SRPM"
-	mkdir -p $(rpmbuild_dir)/BUILD $(rpmbuild_dir)/RPMS \
-		$(rpmbuild_dir)/SOURCES $(rpmbuild_dir)/SPECS \
-		$(rpmbuild_dir)/SRPMS
+	mkdir -p $(rpmbuild_dir)/BUILD $(rpmbuild_dir)/RPMS $(rpmbuild_dir)/SOURCES $(rpmbuild_dir)/SPECS $(rpmbuild_dir)/SRPMS
 	cp target/$(name)-$(version).src.tar.gz $(rpmbuild_dir)/SOURCES/$(name)-$(version).tar.gz
 	rpmbuild --nodeps -v -ba $(spec) --define "_topdir $(rpmbuild_dir)"
+
+
+debian: package
+	debuild --version
+	@echo "Building Debian package in $(debbuild_dir)"
+	mkdir -p $(debbuild_dir)
+	cp target/$(name)-$(version).src.tar.gz $(debbuild_dir)/$(name)_$(version).orig.tar.gz
+	tar -C $(debbuild_dir) -xf target/$(name)-$(version).src.tar.gz
+	mv $(debbuild_dir)/$(name) $(debbuild_dir)/$(name)-$(version) 
+	cd $(debbuild_dir)/$(name)-$(version) && debuild -us -uc 
+
 
 etics:
 	@echo "Publish RPMS, SRPMS and tarball"
