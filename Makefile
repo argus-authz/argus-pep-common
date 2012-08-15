@@ -25,7 +25,8 @@ package: spec
 
 dist: package
 	@echo "Repackaging the maven source tarball..."
-	rm -fr $(name)
+	test ! -d $(name) || rm -fr $(name)
+	test ! -d $(name)-$(version) || rm -fr $(name)-$(version)
 	tar -xzf target/$(name)-$(version).src.tar.gz
 	mv $(name) $(name)-$(version)
 	test ! -f $(name)-$(version).tar.gz || rm $(name)-$(version).tar.gz
