@@ -5,17 +5,17 @@ release=1
 
 rpmbuild_dir=$(CURDIR)/rpmbuild
 debbuild_dir = $(CURDIR)/debbuild
-maven_nexus_settings_file=project/emi-maven-settings.xml
+#maven_settings_file=project/emi-maven-settings.xml
 maven_settings_file=project/maven-settings.xml
 stage_dir=$(CURDIR)/stage
 prefix=/
 
 .PHONY: etics package clean rpm
 
-all: package rpm
+all: package
 
 clean:
-	rm -rf target $(rpmbuild_dir) stage tgz RPMS $(spec)
+	rm -rf target $(rpmbuild_dir) $(debbuild_dir) stage tgz RPMS $(spec)
 
 spec:
 	sed -e 's#@@BUILD_SETTINGS@@#-s $(maven_settings_file)#g' $(spec).in > $(spec)
@@ -23,27 +23,29 @@ spec:
 package: spec
 	mvn -B -s $(maven_settings_file) package
 
-spec-etics:
-	sed -e 's#@@BUILD_SETTINGS@@#-s $(maven_nexus_settings_file)#g' $(spec).in > $(spec)
+dist: package
+	@echo "Repackaging the maven source tarball..."
+	rm -fr $(name)
+	tar -vxzf target/$(name)-$(version).src.tar.gz
+	mv -v $(name) $(name)-$(version)
+	test ! -f $(name)-$(version).tar.gz || rm -v $(name)-$(version).tar.gz
+	tar -vczf $(name)-$(version).tar.gz $(name)-$(version)
 
-package-etics: spec-etics
-	mvn -B -s $(maven_nexus_settings_file) package
 
-
-rpm: package
+rpm: dist
 	@echo "Building RPM and SRPM"
+	mv $(name)-$(version).tar.gz $(name)-$(version).src.tar.gz
 	mkdir -p $(rpmbuild_dir)/BUILD $(rpmbuild_dir)/RPMS $(rpmbuild_dir)/SOURCES $(rpmbuild_dir)/SPECS $(rpmbuild_dir)/SRPMS
-	cp target/$(name)-$(version).src.tar.gz $(rpmbuild_dir)/SOURCES/$(name)-$(version).tar.gz
+	cp $(name)-$(version).src.tar.gz $(rpmbuild_dir)/SOURCES/$(name)-$(version).tar.gz
 	rpmbuild --nodeps -v -ba $(spec) --define "_topdir $(rpmbuild_dir)"
 
 
-debian: package
-	debuild --version
+debian: dist
 	@echo "Building Debian package in $(debbuild_dir)"
+	mv $(name)-$(version).tar.gz $(name)-$(version).src.tar.gz
 	mkdir -p $(debbuild_dir)
-	cp target/$(name)-$(version).src.tar.gz $(debbuild_dir)/$(name)_$(version).orig.tar.gz
-	tar -C $(debbuild_dir) -xf target/$(name)-$(version).src.tar.gz
-	mv $(debbuild_dir)/$(name) $(debbuild_dir)/$(name)-$(version) 
+	cp $(name)-$(version).src.tar.gz $(debbuild_dir)/$(name)_$(version).orig.tar.gz
+	tar -C $(debbuild_dir) -xzf $(name)-$(version).src.tar.gz
 	cd $(debbuild_dir)/$(name)-$(version) && debuild -us -uc 
 
 

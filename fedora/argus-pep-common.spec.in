@@ -29,7 +29,7 @@ The Argus Authorization Service is composed of three main components:
 - The Policy Enforcement Point Server (PEP Server) ensures the integrity and consistency of the authorization requests received from the PEP clients. Lightweight PEP client libraries are also provided to ease the integration and interoperability with other EMI services or components. 
 
 %prep
-%setup -q -n argus-pep-common
+%setup -q
 
 %build
 mvn -B @@BUILD_SETTINGS@@ package
