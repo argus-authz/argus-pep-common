@@ -2,10 +2,11 @@ name=argus-pep-common
 spec=fedora/$(name).spec
 version=$(shell grep "Version:" $(spec) | sed -e "s/Version://g" -e "s/[ \t]*//g")
 release=1
-rpmbuild_dir=$(shell pwd)/rpmbuild
+
+rpmbuild_dir=$(CURDIR)/rpmbuild
 maven_nexus_settings_file=project/emi-maven-settings.xml
 maven_settings_file=project/maven-settings.xml
-stage_dir=$(shell pwd)/stage
+stage_dir=$(CURDIR)/stage
 prefix=/
 
 .PHONY: etics package clean rpm
