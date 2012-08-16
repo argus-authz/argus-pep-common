@@ -8,6 +8,7 @@ debbuild_dir = $(CURDIR)/debbuild
 #maven_settings_file=project/emi-maven-settings.xml
 maven_settings_file=project/maven-settings.xml
 stage_dir=$(CURDIR)/stage
+tmp_dir=$(CURDIR)/tmp
 prefix=/
 
 .PHONY: etics package clean rpm
@@ -15,7 +16,7 @@ prefix=/
 all: package
 
 clean:
-	rm -rf target $(rpmbuild_dir) $(debbuild_dir) stage tgz RPMS $(spec)
+	rm -rf target $(rpmbuild_dir) $(debbuild_dir) $(tmp_dir) stage tgz RPMS $(spec)
 
 spec:
 	sed -e 's#@@BUILD_SETTINGS@@#-s $(maven_settings_file)#g' $(spec).in > $(spec)
@@ -25,13 +26,13 @@ package: spec
 
 dist: package
 	@echo "Repackaging the maven source tarball..."
-	test ! -d $(name) || rm -fr $(name)
-	test ! -d $(name)-$(version) || rm -fr $(name)-$(version)
-	tar -xzf target/$(name)-$(version).src.tar.gz
-	mv $(name) $(name)-$(version)
+	test ! -d $(tmp_dir) || rm -fr $(tmp_dir)
+	mkdir -p $(tmp_dir)
+	tar -C $(tmp_dir) -xzf target/$(name)-$(version).src.tar.gz
+	mv $(tmp_dir)/$(name) $(tmp_dir)/$(name)-$(version)
 	test ! -f $(name)-$(version).tar.gz || rm $(name)-$(version).tar.gz
-	tar -czf $(name)-$(version).tar.gz $(name)-$(version)
-	rm -fr $(name)-$(version)
+	tar -C $(tmp_dir) -czf $(name)-$(version).tar.gz $(name)-$(version)
+	rm -fr $(tmp_dir)
 
 
 rpm: dist
