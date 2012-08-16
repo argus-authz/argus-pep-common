@@ -16,7 +16,7 @@ prefix=/
 all: package
 
 clean:
-	rm -rf target $(rpmbuild_dir) $(debbuild_dir) $(tmp_dir) stage tgz RPMS $(spec)
+	rm -rf target $(rpmbuild_dir) $(debbuild_dir) $(tmp_dir) *.tar.gz stage tgz RPMS $(spec)
 
 spec:
 	sed -e 's#@@BUILD_SETTINGS@@#-s $(maven_settings_file)#g' $(spec).in > $(spec)
