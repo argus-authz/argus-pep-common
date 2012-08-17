@@ -47,11 +47,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/java
 %{_datadir}/java/%{name}.jar
 %{_datadir}/java/%{name}-%{version}.jar
-%dir %{_defaultdocdir}/%{name}-%{version}
-%{_defaultdocdir}/%{name}-%{version}/RELEASE-NOTES
-%{_defaultdocdir}/%{name}-%{version}/COPYRIGHT
-%{_defaultdocdir}/%{name}-%{version}/Hessian.LICENSE
-%{_defaultdocdir}/%{name}-%{version}/LICENSE
+%doc README.md doc/RELEASE-NOTES doc/COPYRIGHT doc/Hessian.LICENSE doc/LICENSE
 
 %changelog
 * Tue Jul 31 2012 Valery Tschopp <valery.tschopp@switch.ch> 2.2.1-1
