@@ -39,6 +39,7 @@ clean:
 
 
 spec:
+	@echo "Setting version and release in spec file: $(version)-$(release)"
 	sed -e 's#@@VERSION@@#$(version)#g' -e 's#@@RELEASE@@#$(release)#g' $(spec_file).in > $(spec_file)
 
 
