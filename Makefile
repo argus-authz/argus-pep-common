@@ -76,6 +76,12 @@ debian: dist
 	cd $(debbuild_dir)/$(name)-$(version) && debuild -us -uc 
 
 
+install:
+	@echo "Install binary in $(DESTDIR)$(prefix)"
+	test -f target/$(name)-$(version).tar.gz
+	mkdir -p $(DESTDIR)$(prefix)
+	tar -C $(DESTDIR)$(prefix) -xvzf target/$(name)-$(version).tar.gz
+
 etics:
 	@echo "Publish RPMS, SRPMS and tarball"
 	test -f $(rpmbuild_dir)/SRPMS/$(name)-$(version)-*.src.rpm
@@ -83,9 +89,3 @@ etics:
 	cp target/*.tar.gz tgz
 	cp -r $(rpmbuild_dir)/RPMS/* $(rpmbuild_dir)/SRPMS/* RPMS
 
-
-install:
-	@echo "Install binary in $(DESTDIR)$(prefix)"
-	test -f target/$(name)-$(version).tar.gz
-	mkdir -p $(DESTDIR)$(prefix)
-	tar -C $(DESTDIR)$(prefix) -xvzf target/$(name)-$(version).tar.gz
