@@ -1,28 +1,51 @@
+##
+# Copyright (c) Members of the EGEE Collaboration. 2006-2010.
+# See http://www.eu-egee.org/partners/ for details on the copyright holders.
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##
+
 name=argus-pep-common
-spec=fedora/$(name).spec
-version=$(shell grep "Version:" $(spec) | sed -e "s/Version://g" -e "s/[ \t]*//g")
+
+version=2.2.1
 release=1
+
+prefix=/
+
+spec_file=fedora/$(name).spec
+maven_settings_file=project/maven-settings.xml
 
 rpmbuild_dir=$(CURDIR)/rpmbuild
 debbuild_dir = $(CURDIR)/debbuild
-#maven_settings_file=project/emi-maven-settings.xml
-maven_settings_file=project/maven-settings.xml
 stage_dir=$(CURDIR)/stage
 tmp_dir=$(CURDIR)/tmp
-prefix=/
 
-.PHONY: etics package clean rpm
+.PHONY: clean spec package dist rpm debian install
 
 all: package
 
 clean:
-	rm -rf target $(rpmbuild_dir) $(debbuild_dir) $(tmp_dir) *.tar.gz stage tgz RPMS $(spec)
+	rm -rf target $(rpmbuild_dir) $(debbuild_dir) $(tmp_dir) *.tar.gz stage tgz RPMS $(spec_file)
+
 
 spec:
-	sed -e 's#@@BUILD_SETTINGS@@#-s $(maven_settings_file)#g' $(spec).in > $(spec)
+	sed -e 's#@@VERSION@@#$(version)#g' -e 's#@@RELEASE@@#$(release)#g' $(spec_file).in > $(spec_file)
+
 
 package: spec
+	@echo "Build with maven"
 	mvn -B -s $(maven_settings_file) package
+
 
 dist: package
 	@echo "Repackaging the maven source tarball..."
@@ -36,11 +59,11 @@ dist: package
 
 
 rpm: dist
-	@echo "Building RPM and SRPM"
+	@echo "Building RPM and SRPM in $(rpmbuild_dir)"
 	mv $(name)-$(version).tar.gz $(name)-$(version).src.tar.gz
 	mkdir -p $(rpmbuild_dir)/BUILD $(rpmbuild_dir)/RPMS $(rpmbuild_dir)/SOURCES $(rpmbuild_dir)/SPECS $(rpmbuild_dir)/SRPMS
 	cp $(name)-$(version).src.tar.gz $(rpmbuild_dir)/SOURCES/$(name)-$(version).tar.gz
-	rpmbuild --nodeps -v -ba $(spec) --define "_topdir $(rpmbuild_dir)"
+	rpmbuild --nodeps -v -ba $(spec_file) --define "_topdir $(rpmbuild_dir)"
 
 
 debian: dist
@@ -58,6 +81,7 @@ etics:
 	mkdir -p tgz RPMS
 	cp target/*.tar.gz tgz
 	cp -r $(rpmbuild_dir)/RPMS/* $(rpmbuild_dir)/SRPMS/* RPMS
+
 
 install:
 	@echo "Install binary in $(DESTDIR)$(prefix)"
