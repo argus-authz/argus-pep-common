@@ -9,7 +9,7 @@ Vcs-Git: git://github.com/argus-authz/argus-pep-common.git
 Vcs-Browser: https://github.com/argus-authz/argus-pep-common
 
 Package: libargus-pep-common-java
-Architecture: any
+Architecture: all
 Depends: ${java:Depends}, ${misc:Depends}
 Recommends: ${java:Recommends}
 Description: Argus PEP client and PEP Server shared library.
