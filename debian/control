@@ -1,21 +1,21 @@
 Source: argus-pep-common
 Priority: extra
 Maintainer: Valery Tschopp <valery.tschopp@switch.ch>
-Build-Depends: debhelper (>= 7.0.50~), javahelper (>=0.25)
+Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.8.4
 Section: java
-Homepage: <insert the upstream URL, if relevant>
-#Vcs-Git: git://git.debian.org/collab-maint/argus-pep-common.git
-#Vcs-Browser: http://git.debian.org/?p=collab-maint/argus-pep-common.git;a=summary
+Homepage: https://twiki.cern.ch/twiki/bin/view/EGEE/AuthorizationFramework
+Vcs-Git: git://github.com/argus-authz/argus-pep-common.git
+Vcs-Browser: https://github.com/argus-authz/argus-pep-common
 
 Package: libargus-pep-common-java
 Architecture: any
 Depends: ${java:Depends}, ${misc:Depends}
 Recommends: ${java:Recommends}
 Description: Argus PEP client and PEP Server shared library.
-  The Argus Authorization Service renders consistent authorization 
-  decisions for distributed services (e.g., user interfaces, 
-  portals, computing elements, storage elements). The service 
-  is based on the XACML standard, and uses authorization policies 
-  to determine if a user is allowed or denied to perform a certain 
-  action on a particular service.
+ The Argus Authorization Service renders consistent authorization 
+ decisions for distributed services (e.g., user interfaces, 
+ portals, computing elements, storage elements). The service 
+ is based on the XACML standard, and uses authorization policies 
+ to determine if a user is allowed or denied to perform a certain 
+ action on a particular service.
