@@ -30,7 +30,7 @@ debbuild_dir = $(CURDIR)/debbuild
 stage_dir=$(CURDIR)/stage
 tmp_dir=$(CURDIR)/tmp
 
-.PHONY: clean spec package dist rpm deb install
+.PHONY: clean spec package dist rpm srpm deb install
 
 all: package
 
@@ -62,12 +62,21 @@ dist: spec
 	rm -fr $(tmp_dir)
 
 
-rpm:
+pre_rpmbuild:
 	test -f $(name)-$(version).tar.gz || make dist
-	@echo "Building RPM and SRPM in $(rpmbuild_dir)"
+	@echo "Preparing for rpmbuild in $(rpmbuild_dir)"
 	mv $(name)-$(version).tar.gz $(name)-$(version).src.tar.gz
 	mkdir -p $(rpmbuild_dir)/BUILD $(rpmbuild_dir)/RPMS $(rpmbuild_dir)/SOURCES $(rpmbuild_dir)/SPECS $(rpmbuild_dir)/SRPMS
 	cp $(name)-$(version).src.tar.gz $(rpmbuild_dir)/SOURCES/$(name)-$(version).tar.gz
+
+
+srpm: pre_rpmbuild
+	@echo "Building SRPM in $(rpmbuild_dir)"
+	rpmbuild --nodeps -v -bs $(spec_file) --define "_topdir $(rpmbuild_dir)"
+
+
+rpm: pre_rpmbuild
+	@echo "Building RPM/SRPM in $(rpmbuild_dir)"
 	rpmbuild --nodeps -v -ba $(spec_file) --define "_topdir $(rpmbuild_dir)"
 
 
