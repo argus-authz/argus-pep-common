@@ -97,9 +97,12 @@ install:
 	tar -C $(DESTDIR)$(prefix) -xvzf target/$(name)-$(version).tar.gz
 
 etics:
-	@echo "Publish RPMS, SRPMS and tarball"
-	test -f $(rpmbuild_dir)/SRPMS/$(name)-$(version)-*.src.rpm
-	mkdir -p tgz RPMS
-	cp target/*.tar.gz tgz
-	cp -r $(rpmbuild_dir)/RPMS/* $(rpmbuild_dir)/SRPMS/* RPMS
+	@echo "Publish SRPM/RPM/Debian/tarball"
+	mkdir -p RPMS tgz
+	test ! -f $(name)-$(version).src.tar.gz || cp -v $(name)-$(version).src.tar.gz tgz
+	test ! -f $(rpmbuild_dir)/SRPMS/$(name)-$(version)-*.src.rpm || cp -v $(rpmbuild_dir)/SRPMS/$(name)-$(version)-*.src.rpm RPMS
+	if [ -f $(rpmbuild_dir)/RPMS/*/$(name)-$(version)-*.rpm ] ; then \
+		cp -v $(rpmbuild_dir)/RPMS/*/$(name)-$(version)-*.rpm RPMS ;\
+	fi
+
 
