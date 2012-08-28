@@ -27,7 +27,6 @@ maven_settings_file=project/maven-settings.xml
 
 rpmbuild_dir=$(CURDIR)/rpmbuild
 debbuild_dir = $(CURDIR)/debbuild
-stage_dir=$(CURDIR)/stage
 tmp_dir=$(CURDIR)/tmp
 tgz_dir=$(CURDIR)/tgz
 
