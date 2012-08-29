@@ -21,6 +21,7 @@ version=2.2.1
 release=1
 
 prefix=/
+deb_name=libargus-pep-common-java
 
 spec_file=fedora/$(name).spec
 maven_settings_file=project/maven-settings.xml
@@ -126,11 +127,11 @@ etics:
 	test ! -f $(debbuild_dir)/$(name)_$(version)-*.dsc || cp -v $(debbuild_dir)/$(name)_$(version)-*.dsc $(deb_dir)
 	test ! -f $(debbuild_dir)/$(name)_$(version)-*.debian.tar.gz || cp -v $(debbuild_dir)/$(name)_$(version)-*.debian.tar.gz $(deb_dir)
 	test ! -f $(debbuild_dir)/$(name)_$(version).orig.tar.gz || cp -v $(debbuild_dir)/$(name)_$(version).orig.tar.gz $(deb_dir)
-	if [ -f $(debbuild_dir)/$(name)_$(version)-*.deb ] ; then \
-		cp -v $(debbuild_dir)/$(name)_$(version)-*.deb $(deb_dir) ; \
+	if [ -f $(debbuild_dir)/$(deb_name)_$(version)-*.deb ] ; then \
+		cp -v $(debbuild_dir)/$(deb_name)_$(version)-*.deb $(deb_dir) ; \
 		test ! -d $(tmp_dir) || rm -fr $(tmp_dir) ; \
 		mkdir -p $(tmp_dir) ; \
-		dpkg -x $(debbuild_dir)/$(name)_$(version)-*.deb $(tmp_dir) ; \
+		dpkg -x $(debbuild_dir)/$(deb_name)_$(version)-*.deb $(tmp_dir) ; \
 		cd $(tmp_dir) ; \
 		tar -C $(tmp_dir) -czf $(name)-$(version).tar.gz * ; \
 		mv -v $(name)-$(version).tar.gz $(tgz_dir) ; \
