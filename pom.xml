@@ -14,7 +14,7 @@
     <name>Argus PEP client and server common library</name>
     <groupId>org.glite.authz</groupId>
     <artifactId>pep-common</artifactId>
-    <version>2.2.1</version>
+    <version>2.3.0</version>
     <packaging>jar</packaging>
 
     <description>XACML based authorization service</description>
