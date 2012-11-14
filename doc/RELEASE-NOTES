@@ -1,3 +1,12 @@
+argus-pep-common 2.3.0
+----------------------
+- uses org.glite.authz:argus-parent:1.6 parent module.
+- RPM and Debian packaging moved to separate projects.
+
+argus-pep-common 2.2.1
+----------------------
+- self managed packaging added.
+
 argus-pep-common 2.2.0
 ----------------------
 - uses org.glite.authz:argus-parent:1.5 parent module.
