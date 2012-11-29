@@ -95,6 +95,7 @@
             <!-- support for scpexe: -->
             <groupId>org.apache.maven.wagon</groupId>
             <artifactId>wagon-ssh-external</artifactId>
+            <version>2.2</version>
           </extension>
         </extensions>
     </build>
