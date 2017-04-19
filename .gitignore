@@ -1,4 +1,5 @@
 /.settings
 /*.tar.gz
 /target
-
+.project
+.classpath
