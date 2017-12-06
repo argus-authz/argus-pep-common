@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 pipeline {
   
   agent { label 'maven' }
@@ -7,21 +9,75 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   
-  triggers {
-    cron('@daily')
-  }
-  
   stages {
-    stage('prepare') {
+    stage('build') {
       steps {
-        sh 'sed -i \'s#http:\\/\\/radiohead\\.cnaf\\.infn\\.it:8081\\/nexus\\/content\\/repositories#https:\\/\\/repo\\.cloud\\.cnaf\\.infn\\.it\\/repository#g\' pom.xml'
+        container('maven-runner'){
+          sh 'mvn -B clean compile'
+        }
       }
-      
+    }
+
+    stage('test') {
+      steps {
+        container('maven-runner'){
+          sh 'mvn -B clean test'
+        }
+      }
+
+      post {
+        always {
+          container('maven-runner'){
+            junit '**/target/surefire-reports/TEST-*.xml'
+          }
+        }
+      }
+    }
+    
+    stage('PR analysis'){
+      when{
+        not {
+          environment name: 'CHANGE_URL', value: ''
+        }
+      }
+      steps {
+        container('maven-runner'){
+          script{
+            def tokens = "${env.CHANGE_URL}".tokenize('/')
+            def organization = tokens[tokens.size()-4]
+            def repo = tokens[tokens.size()-3]
+
+            withCredentials([string(credentialsId: '630f8e6c-0d31-4f96-8d82-a1ef536ef059', variable: 'GITHUB_ACCESS_TOKEN')]) {
+              withSonarQubeEnv{
+                sh """
+                  mvn -B -U clean compile sonar:sonar \\
+                    -Dsonar.analysis.mode=preview \\
+                    -Dsonar.github.pullRequest=${env.CHANGE_ID} \\
+                    -Dsonar.github.repository=${organization}/${repo} \\
+                    -Dsonar.github.oauth=${GITHUB_ACCESS_TOKEN} \\
+                    -Dsonar.host.url=${SONAR_HOST_URL} \\
+                    -Dsonar.login=${SONAR_AUTH_TOKEN}
+                """
+              }
+            }
+          }
+        }
+      }
     }
     
     stage('deploy') {
       steps {
-        sh "mvn clean -U -B deploy"
+        container('maven-runner'){
+          sh "mvn clean -U -B deploy"
+        }
+      }
+    }
+    
+    stage('result'){
+      steps {
+        script {
+          currentBuild.result = 'SUCCESS'
+        }
       }
     }
   }
@@ -29,6 +85,14 @@ pipeline {
   post {
     failure {
       slackSend color: 'danger', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Failure (<${env.BUILD_URL}|Open>)"
+    }
+    
+    changed {
+      script{
+        if('SUCCESS'.equals(currentBuild.result)) {
+          slackSend color: 'good', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Back to normal (<${env.BUILD_URL}|Open>)"
+        }
+      }
     }
   }
 }
