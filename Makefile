@@ -17,8 +17,8 @@
 
 name=argus-pep-common
 
-version=2.3.1
-release=1
+version=2.3.2
+release=0
 
 prefix=/
 
